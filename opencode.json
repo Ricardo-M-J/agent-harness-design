@@ -1,68 +1,26 @@
 {
+  "$schema": "https://opencode.ai/config.json",
   "agent": {
     "planner": {
-      "description": "规划智能体 - 需求理解、信息搜索、任务拆解、设计方案制定",
+      "description": "规划智能体 — 设计策略师，需求分析与方案制定",
       "mode": "subagent",
-      "prompt": "{file:./.opencode/agents/planner.md}",
+      "prompt": "{file:.opencode/agents/planner.txt}",
       "temperature": 0.3,
-      "steps": 15,
-      "permission": {
-        "read": "allow",
-        "edit": "allow",
-        "bash": "deny",
-        "webfetch": "allow",
-        "websearch": "allow",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "task": "deny",
-        "skill": {
-          "*": "allow"
-        }
-      }
+      "steps": 8
     },
     "designer": {
-      "description": "设计智能体 - 创意文案、设计规范、调用文生图工具",
+      "description": "设计智能体 — 创意执行者，文案/视觉/页面全流程设计",
       "mode": "subagent",
-      "prompt": "{file:./.opencode/agents/designer.md}",
+      "prompt": "{file:.opencode/agents/designer.txt}",
       "temperature": 0.7,
-      "steps": 20,
-      "permission": {
-        "read": "allow",
-        "edit": "allow",
-        "bash": "allow",
-        "webfetch": "allow",
-        "websearch": "allow",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "task": "deny",
-        "skill": {
-          "*": "allow"
-        }
-      }
+      "steps": 10
     },
     "critic": {
-      "description": "评估智能体 - 结构化评分、差异化反馈、收敛检测",
+      "description": "评估智能体 — 设计评审专家，五维自评审+质量门禁",
       "mode": "subagent",
-      "prompt": "{file:./.opencode/agents/critic.md}",
+      "prompt": "{file:.opencode/agents/critic.txt}",
       "temperature": 0.2,
-      "steps": 10,
-      "permission": {
-        "read": "allow",
-        "edit": "deny",
-        "bash": "deny",
-        "webfetch": "deny",
-        "websearch": "deny",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "task": "deny",
-        "skill": {
-          "*": "allow"
-        }
-      }
+      "steps": 5
     }
-  },
-  "$schema": "https://opencode.ai/config.json"
+  }
 }

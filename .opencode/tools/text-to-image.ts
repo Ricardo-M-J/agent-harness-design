@@ -1,113 +1,179 @@
-import { tool } from "@opencode-ai/plugin"
-import path from "path"
-import fs from "fs"
+/**
+ * Text-to-Image Custom Tool for OpenCode Design System
+ *
+ * 使用 Pollinations.ai 免费 API 生成设计图像。
+ * 完全免费，无需 API Key，无需注册。
+ *
+ * ⚠️ 重要限制：AI 图像生成模型无法正确渲染文字（尤其是中文汉字）。
+ * 生成的图像中的文字将是乱码/随机字形。
+ * Logo、名片、海报等含文字的图像 → 必须使用 SVG（用 HTML/CSS 渲染文字）。
+ * 本工具仅适用于：纯视觉元素（纹理/背景/抽象图形/风格参考图）。
+ *
+ * 调用方式：
+ *   node .opencode/tools/text-to-image.ts --prompt "abstract geometric pattern" --style icon --output "outputs/project/pattern.png"
+ */
 
-export default tool({
-  description: "根据文本描述生成设计图像（当前为Mock模式，生成SVG占位图）",
-  args: {
-    prompt: tool.schema.string().describe("详细的英文图像生成描述"),
-    output_path: tool.schema.string().describe("输出文件路径（不含扩展名），相对于项目根目录"),
-    style: tool.schema.string().optional().describe("图像风格：logo/poster/product/illustration"),
-    color_scheme: tool.schema.string().optional().describe("色彩方案描述，如 warm/cool/minimal"),
-  },
-  async execute(args, context) {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-")
-    const outputPath = path.join(context.worktree, args.output_path)
+import { tool } from "@opencode-ai/plugin/tool";
 
-    // 确保目录存在
-    fs.mkdirSync(path.dirname(outputPath), { recursive: true })
+// 文生图风格预设（所有预设强调：无文字，纯视觉元素）
+const STYLE_PRESETS: Record<string, string> = {
+  logo: "abstract minimalist logo mark, clean geometric shapes, flat design, scalable, NO TEXT NO LETTERS NO CHINESE CHARACTERS, pure visual symbol only, white background",
+  poster: "abstract poster background, high quality, balanced composition, NO TEXT NO TYPOGRAPHY, pure visual atmosphere",
+  banner: "abstract web banner background, modern geometric, brand colors, NO TEXT, pure visual texture",
+  card: "abstract card background, subtle geometric pattern, NO TEXT",
+  social: "abstract social media background, engaging visual texture, NO TEXT NO LETTERS",
+  icon: "minimalist app icon, flat design, recognizable silhouette, simple geometric shapes, NO TEXT",
+  brand_image: "abstract brand texture, geometric pattern, studio lighting, clean composition, NO TEXT NO LETTERS",
+  illustration: "abstract editorial illustration, modern geometric style, conceptual shapes, brand colors, NO TEXT NO LETTERS",
+};
 
-    // Mock 模式：生成 SVG 占位图
-    const svgContent = generateMockSVG(args.prompt, args.style || "general", args.color_scheme)
-    const svgPath = $BT$BT${outputPath}.svg$BT$BT
-    fs.writeFileSync(svgPath, svgContent, "utf-8")
-
-    // 保存 prompt 记录
-    const promptRecord = [
-      "# Image Generation Prompt",
-      "",
-      "## Prompt",
-      args.prompt,
-      "",
-      "## Style",
-      args.style || "general",
-      "",
-      "## Color Scheme",
-      args.color_scheme || "auto",
-      "",
-      "## Generated At",
-      timestamp,
-      "",
-      "## Status",
-      "Mock mode - SVG placeholder generated",
-      "",
-      "## Next Steps",
-      "Replace this mock with real text-to-image API integration.",
-      "Supported APIs: DALL-E 3, Stable Diffusion, Midjourney API, etc.",
-    ].join("
-")
-
-    const promptPath = $BT$BT${outputPath}-prompt.md$BT$BT
-    fs.writeFileSync(promptPath, promptRecord, "utf-8")
-
-    return [
-      "Mock image generated successfully!",
-      $BT$BT- SVG placeholder: ${svgPath}$BT$BT
-      $BT$BT- Prompt record: ${promptPath}$BT$BT
-      "",
-      "Note: This is a mock placeholder. To use real image generation,",
-      "modify this tool to call a text-to-image API (DALL-E, SD, etc.).",
-    ].join("
-")
-  },
-})
-
-function generateMockSVG(
-  prompt: string,
-  style: string,
-  colorScheme?: string
-): string {
-  const colors = colorScheme
-    ? parseColorScheme(colorScheme)
-    : { primary: "#4A90D9", secondary: "#2C5F8A", accent: "#F5A623" }
-  const escapedPrompt = prompt.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").substring(0, 120)
-
-  return [
-    $BT$BT<?xml version="1.0" encoding="UTF-8"?>$BT$BT
-    $BT$BT<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">$BT$BT
-    $BT$BT  <defs>$BT$BT
-    $BT$BT    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">$BT$BT
-    $BT$BT      <stop offset="0%" style="stop-color:${colors.primary};stop-opacity:0.1" />$BT$BT
-    $BT$BT      <stop offset="100%" style="stop-color:${colors.secondary};stop-opacity:0.2" />$BT$BT
-    $BT$BT    </linearGradient>$BT$BT
-    $BT$BT  </defs>$BT$BT
-    $BT$BT  <rect width="800" height="600" fill="url(#bg)" rx="8"/>$BT$BT
-    $BT$BT  <rect x="40" y="40" width="720" height="520" fill="white" rx="8" opacity="0.9"/>$BT$BT
-    $BT$BT  <text x="400" y="220" font-family="Arial, sans-serif" font-size="28" fill="${colors.primary}" text-anchor="middle" font-weight="bold">Design Mock</text>$BT$BT
-    $BT$BT  <text x="400" y="260" font-family="Arial, sans-serif" font-size="16" fill="#666" text-anchor="middle">Style: ${style}</text>$BT$BT
-    $BT$BT  <text x="400" y="300" font-family="Arial, sans-serif" font-size="12" fill="#999" text-anchor="middle">${escapedPrompt}</text>$BT$BT
-    $BT$BT  <rect x="300" y="360" width="200" height="44" fill="${colors.accent}" rx="22" opacity="0.85"/>$BT$BT
-    $BT$BT  <text x="400" y="387" font-family="Arial, sans-serif" font-size="15" fill="white" text-anchor="middle">MOCK PLACEHOLDER</text>$BT$BT
-    $BT$BT  <text x="400" y="440" font-family="Arial, sans-serif" font-size="11" fill="#bbb" text-anchor="middle">Replace with real text-to-image API</text>$BT$BT
-    $BT$BT</svg>$BT$BT
-  ].join("
-")
+function buildPrompt(userPrompt: string, style: string, colorScheme?: string): string {
+  const styleSuffix = STYLE_PRESETS[style] || STYLE_PRESETS.logo;
+  let fullPrompt = `${userPrompt}, ${styleSuffix}`;
+  if (colorScheme) {
+    fullPrompt += `, ${colorScheme} color scheme`;
+  }
+  // 添加反套路约束
+  fullPrompt +=
+    ", no purple-pink gradient, no emoji, professional design, high quality, no text rendering artifacts";
+  return fullPrompt;
 }
 
-function parseColorScheme(scheme: string): {
-  primary: string
-  secondary: string
-  accent: string
-} {
-  if (scheme.includes("warm"))
-    return { primary: "#D4A574", secondary: "#8B6914", accent: "#C0392B" }
-  if (scheme.includes("cool"))
-    return { primary: "#2C5F8A", secondary: "#1A365D", accent: "#4A90D9" }
-  if (scheme.includes("minimal"))
-    return { primary: "#333333", secondary: "#666666", accent: "#999999" }
-  if (scheme.includes("vibrant"))
-    return { primary: "#E74C3C", secondary: "#8E44AD", accent: "#F39C12" }
-  if (scheme.includes("nature"))
-    return { primary: "#27AE60", secondary: "#2ECC71", accent: "#F1C40F" }
-  return { primary: "#4A90D9", secondary: "#2C5F8A", accent: "#F5A623" }
+export const textToImageTool = tool({
+  description:
+    "使用 AI 生成设计图像（Logo、海报、横幅等）。基于 Pollinations.ai 免费 API。支持多种设计风格预设。参数: prompt(描述), style(logo/poster/banner/card/social/icon/brand_image/illustration), width(默认512), height(默认512), output_path(保存路径)",
+  args: {
+    prompt: tool.schema.string().describe("图像生成提示词，描述你想要的设计"),
+    style: tool.schema
+      .enum([
+        "logo",
+        "poster",
+        "banner",
+        "card",
+        "social",
+        "icon",
+        "brand_image",
+        "illustration",
+      ] as const)
+      .default("logo")
+      .describe("设计风格预设"),
+    width: tool.schema.number().default(512).describe("图像宽度（像素）"),
+    height: tool.schema.number().default(512).describe("图像高度（像素）"),
+    color_scheme: tool.schema
+      .string()
+      .optional()
+      .describe("色彩方案描述，如 'deep blue with red accent'"),
+    output_path: tool.schema
+      .string()
+      .describe("图像保存路径，如 'outputs/project/logo.png'"),
+  },
+  async execute(args, ctx) {
+    const { prompt, style, width, height, color_scheme, output_path } = args;
+    const fullPrompt = buildPrompt(prompt, style, color_scheme);
+    const encodedPrompt = encodeURIComponent(fullPrompt);
+    const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=${width}&height=${height}&model=flux&nologo=true`;
+
+    console.log(`[text-to-image] 正在生成图像...`);
+    console.log(`[text-to-image] 风格: ${style}`);
+    console.log(`[text-to-image] 尺寸: ${width}x${height}`);
+    console.log(`[text-to-image] 提示词: ${fullPrompt.substring(0, 200)}...`);
+
+    try {
+      const response = await fetch(imageUrl, {
+        signal: AbortSignal.timeout(60000),
+      });
+
+      if (!response.ok) {
+        return `图像生成失败: HTTP ${response.status} ${response.statusText}`;
+      }
+
+      const buffer = Buffer.from(await response.arrayBuffer());
+
+      // 写入文件
+      const fs = await import("fs/promises");
+      const path = await import("path");
+
+      const outputFile = path.resolve(ctx.worktree, output_path);
+      await fs.mkdir(path.dirname(outputFile), { recursive: true });
+      await fs.writeFile(outputFile, buffer);
+
+      const result = {
+        title: "图像生成成功",
+        output: `✅ 图像已生成并保存到: ${output_path}
+📐 尺寸: ${width}x${height}
+🎨 风格: ${style}
+🔗 在线URL: ${imageUrl}
+📝 完整提示词: ${fullPrompt}`,
+        metadata: {
+          image_url: imageUrl,
+          output_path: output_path,
+          style: style,
+          width: width,
+          height: height,
+          prompt: fullPrompt,
+        },
+      };
+
+      return JSON.stringify(result, null, 2);
+    } catch (error: any) {
+      return `图像生成失败: ${error.message}\n\n回退方案：你可以直接在浏览器中打开此 URL 查看生成结果：\n${imageUrl}`;
+    }
+  },
+});
+
+/**
+ * 独立运行模式（通过 Bash 调用时使用）
+ *
+ * 用法: npx tsx .opencode/tools/text-to-image.ts --prompt "..." --style logo --output "path/to/file.png"
+ */
+async function main() {
+  const args = process.argv.slice(2);
+  const getArg = (name: string) => {
+    const idx = args.indexOf(`--${name}`);
+    return idx >= 0 ? args[idx + 1] : undefined;
+  };
+
+  const prompt = getArg("prompt") || "modern minimalist logo";
+  const style = getArg("style") || "logo";
+  const width = parseInt(getArg("width") || "512");
+  const height = parseInt(getArg("height") || "512");
+  const colorScheme = getArg("color_scheme");
+  const outputPath = getArg("output") || `outputs/generated_${Date.now()}.png`;
+
+  const fullPrompt = buildPrompt(prompt, style, colorScheme);
+  const encodedPrompt = encodeURIComponent(fullPrompt);
+  const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=${width}&height=${height}&model=flux&nologo=true`;
+
+  console.log(`[text-to-image] 提示词: ${fullPrompt.substring(0, 300)}...`);
+  console.log(`[text-to-image] 生成URL: ${imageUrl}`);
+  console.log(`[text-to-image] 正在下载...`);
+
+  try {
+    const response = await fetch(imageUrl, { signal: AbortSignal.timeout(60000) });
+    if (!response.ok) {
+      console.error(`HTTP ${response.status}: ${response.statusText}`);
+      process.exit(1);
+    }
+
+    const fs = await import("fs/promises");
+    const path = await import("path");
+    const outputFile = path.resolve(outputPath);
+    await fs.mkdir(path.dirname(outputFile), { recursive: true });
+
+    const buffer = Buffer.from(await response.arrayBuffer());
+    await fs.writeFile(outputFile, buffer);
+
+    console.log(`✅ 图像已保存: ${outputPath}`);
+    console.log(`🔗 在线URL: ${imageUrl}`);
+  } catch (error: any) {
+    console.error(`❌ 失败: ${error.message}`);
+    console.log(`🔗 在线URL（手动打开）: ${imageUrl}`);
+    process.exit(1);
+  }
+}
+
+// 如果直接运行此脚本（非 import），执行 main
+const isMain = process.argv[1]?.includes("text-to-image");
+if (isMain) {
+  main();
 }
