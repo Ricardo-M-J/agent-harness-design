@@ -1,0 +1,1 @@
+读取 outputs/上海创智/design_paradigm.md、prompts.md 和所有图片文件，输出评审报告到 review_round1.md。

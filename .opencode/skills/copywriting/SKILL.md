@@ -1,3 +1,8 @@
+---
+name: copywriting
+description: 创意文案：品牌故事 + 标语体系 + 品牌宣言 + 话术指南
+---
+
 # Copywriting Skill — 创意文案
 
 > 为品牌设计提供专业的创意文案服务。覆盖品牌故事、标语体系、品牌宣言、话术指南等。

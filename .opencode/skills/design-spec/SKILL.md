@@ -1,3 +1,8 @@
+---
+name: design-spec
+description: 设计规范文档：Token系统（色彩/字体/间距/圆角/阴影/动效）+ 多格式导出
+---
+
 # Design Spec Skill — 设计规范文档
 
 > 生成专业、完整、工程可用的设计规范文档。灵感：Open Design DESIGN.md / 各大品牌 VI 手册

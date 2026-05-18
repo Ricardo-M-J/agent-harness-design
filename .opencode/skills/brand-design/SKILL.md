@@ -1,3 +1,8 @@
+---
+name: brand-design
+description: 品牌形象设计：反套路清单 + oklch色彩系统 + 6组色彩x字体配对 + 6步工作流
+---
+
 # Brand Design Skill — 品牌形象设计
 
 > 将设计品味编码为可执行规则。灵感来源：Claude Design / Open Design / web-design-skill

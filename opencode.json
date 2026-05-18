@@ -1,35 +1,95 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "opencode/minimax-m2.5-free",
-  "small_model": "opencode/deepseek-v4-flash-free",
+  "model": "boyuerich/gpt-4o",
+  "small_model": "boyuerich/gpt-4o-mini",
+  "provider": {
+    "boyuerich": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Boyuerich API",
+      "options": {
+        "baseURL": "https://apicz.boyuerichdata.com/v1",
+        "apiKey": "sk-KQRts8IEJesfFj06YYsPXuleWodDxIlZ2t5g2A3DJDk0XRvJ"
+      },
+      "models": {
+        "gpt-4o": {
+          "name": "GPT-4o",
+          "limit": { "context": 128000, "output": 16384 }
+        },
+        "gpt-4o-mini": {
+          "name": "GPT-4o Mini",
+          "limit": { "context": 128000, "output": 16384 }
+        },
+        "gpt-4.1-mini": {
+          "name": "GPT-4.1 Mini",
+          "limit": { "context": 128000, "output": 16384 }
+        },
+        "o3-mini": {
+          "name": "o3-mini",
+          "limit": { "context": 128000, "output": 16384 }
+        }
+      }
+    }
+  },
   "agent": {
+    "build": {
+      "steps": 20,
+      "permission": {
+        "text-to-image": "deny",
+        "bash": {
+          "*": "deny"
+        },
+        "edit": {
+          "*": "deny"
+        }
+      }
+    },
     "planner": {
       "description": "规划智能体 — 设计策略师，需求分析与方案制定",
       "mode": "subagent",
+      "model": "boyuerich/gpt-4.1-mini",
       "prompt": "{file:.opencode/agents/planner.txt}",
       "temperature": 0.3,
-      "steps": 8
+      "steps": 8,
+      "permission": {
+        "edit": {
+          "*": "allow"
+        },
+        "bash": {
+          "*": "allow"
+        }
+      }
     },
     "designer": {
-      "description": "设计智能体 — 创意执行者，文案/视觉/页面全流程设计",
+      "description": "设计智能体 — 创意执行者，范式分析+提示词+生图",
       "mode": "subagent",
+      "model": "boyuerich/gpt-4o",
       "prompt": "{file:.opencode/agents/designer.txt}",
       "temperature": 0.7,
-      "steps": 10
-    },
-    "visual-designer": {
-      "description": "视觉设计智能体 — 专注图片生成（Logo/吉祥物/文创），基于创智风格范式",
-      "mode": "subagent",
-      "prompt": "{file:.opencode/agents/designer-visual.txt}",
-      "temperature": 0.7,
-      "steps": 12
+      "steps": 6,
+      "permission": {
+        "edit": {
+          "*": "allow"
+        },
+        "bash": {
+          "*": "allow"
+        }
+      }
     },
     "critic": {
-      "description": "评估智能体 — 设计评审专家，五维自评审+质量门禁",
+      "description": "评估智能体 — 看图评审+结构化改进建议",
       "mode": "subagent",
+      "model": "boyuerich/gpt-4o",
       "prompt": "{file:.opencode/agents/critic.txt}",
       "temperature": 0.2,
-      "steps": 5
+      "steps": 5,
+      "permission": {
+        "edit": {
+          "*": "allow"
+        },
+        "bash": {
+          "*": "allow"
+        }
+      }
     }
   }
 }

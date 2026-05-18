@@ -1,3 +1,8 @@
+---
+name: design-review
+description: 设计评审：五维评分 + AI套路检测 + P0/P1/P2质量门禁
+---
+
 # Design Review Skill — 设计评审
 
 > 提供结构化、可操作的设计评审服务。灵感：Open Design 五维自评审 + P0/P1/P2 质量门禁

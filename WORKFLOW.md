@@ -276,14 +276,45 @@ agent-harness-design/
 
 ## 🔧 配置参考
 
-### OpenCode 免费模型
+### OpenCode 模型配置（创智 API）
 
 ```json
 {
-  "model": "opencode/minimax-m2.5-free",
-  "small_model": "opencode/deepseek-v4-flash-free"
+  "model": "gpt-4o",
+  "small_model": "gpt-4o-mini",
+  "agent": {
+    "planner": { "model": "gpt-4.1-mini" },
+    "designer": { "model": "gpt-4o" },
+    "visual-designer": { "model": "gpt-4o" },
+    "critic": { "model": "o3-mini" }
+  }
 }
 ```
+
+### 模型选择策略
+
+| Agent | 模型 | 理由 |
+|-------|------|------|
+| **Primary** | `gpt-4o` | 通用协调，平衡能力与速度 |
+| **Planner** | `gpt-4.1-mini` | 规划任务不需要最强模型，够用且快 |
+| **Designer** | `gpt-4o` | 创意生成需要强模型 |
+| **Visual Designer** | `gpt-4o` | 图像提示词需要理解视觉概念 |
+| **Critic** | `o3-mini` | 评审需要强推理能力 |
+
+### 创智 API 可用模型
+
+**图像生成**：
+- `gpt-image-2` ✅ 推荐
+- `gemini-2.5-flash-image`
+- `gemini-3-pro-image-preview`
+
+**推理模型**：
+- `o1`, `o3`, `o3-mini`, `o4-mini`
+
+**通用模型**：
+- `gpt-4o`, `gpt-4o-mini`
+- `gpt-4.1`, `gpt-4.1-mini`, `gpt-4.1-nano`
+- `gpt-5` 系列
 
 ### 创智 API 配置
 
