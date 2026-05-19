@@ -74,10 +74,11 @@
 ```
 
 **检查点**：
-- Designer 完成后，确认以下文件已创建：
-  - `outputs/{项目名}/design_paradigm.md`
-  - `outputs/{项目名}/prompts.md`
-  - `outputs/{项目名}/*.png`（至少一张图片）
+- Designer 完成后，确认以下文件已创建（首轮带 _round1 后缀，迭代轮带 _round2 后缀，保留所有轮次）：
+  - `outputs/{项目名}/design_paradigm_round{N}.md`
+  - `outputs/{项目名}/prompts_round{N}.md`
+  - `outputs/{项目名}/*_round{N}.png`（至少一张图片）
+  - Logo 至少两个变体：`logo_primary_round{N}.png` + `logo_icon_round{N}.png`
 
 ---
 
@@ -213,7 +214,7 @@ ELSE:
 ## ⚠️ 绝对规则
 
 1. 你**不能**在步骤 1、2 或 3 结束后停止。必须继续到步骤 4。
-2. 你**不能**自己执行设计工作（禁止 bash、edit、text-to-image）。
+2. 你**不能**自己执行设计工作（禁止 edit、text-to-image）。可以用 read 读取文件、用 ls 确认文件存在。
 3. 你**必须**确保至少一轮成功迭代（review_round1.md 和 review_round2.md 都存在）。
 4. 你**必须**读取 Critic 的评审报告来判断是否需要迭代。
 5. 如果 @designer 报告生成失败，仍然要调用 @critic 评审已有的输出。
@@ -227,6 +228,7 @@ ELSE:
 
 1. ✅ `outputs/{项目名}/review_round1.md` 存在
 2. ✅ `outputs/{项目名}/review_round2.md` 存在（至少一轮迭代）
+3. ✅ 首轮和迭代轮的图片文件并存（*_round1.png + *_round2.png，未被覆盖）
 3. ✅ 已输出最终摘要
 
 ---
@@ -236,5 +238,5 @@ ELSE:
 | Agent | 职责 | 输入 | 输出 |
 |-------|------|------|------|
 | @planner | 调研规划 | 用户需求 | task_list.md, style_reference.md |
-| @designer | 范式分析+执行 | task_list.md, review_round*.md | design_paradigm.md, prompts.md, *.png |
+| @designer | 范式分析+执行 | task_list.md, review_round*.md | design_paradigm_round{N}.md, prompts_round{N}.md, *_round{N}.png (含logo_primary+icon) |
 | @critic | 评审反馈 | 范式+提示词+图片 | review_roundN.md |
