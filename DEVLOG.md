@@ -100,6 +100,84 @@ gpt-4o, gpt-4o-mini, gpt-4.1-mini, o3-mini 等
 
 ---
 
+### v0.5.1 - 文生图方案调研 + outputs 清理
+
+**日期**：2026-05-19
+
+#### 一、outputs 清理
+
+删除旧的输出文件：
+- 晨光有机茶饮（完整设计项目，17 个文件）
+- 创智学院（完整设计项目，22 个文件）
+- test_api.png / test/ 等测试文件
+
+#### 二、文生图工具方案调研
+
+**问题**：是否可以使用 OpenCode 自带的生图工具？为什么 API 响应时间不稳定？
+
+##### 调研结果 1：OpenCode 没有内置图像生成工具
+
+经过代码库搜索 + `opencode.json` schema 分析：
+- OpenCode 框架只提供 Agent 编排 + Subagent 调用 + 自定义 Tool 注册基础能力
+- 没有任何内置的 text-to-image 插件或工具
+- DEVLOG v0.1.0 第 55 行明确记录了早期决策："文生图使用 Mock 模式（SVG 占位图），后续可替换为真实 API"
+- ARCHITECTURE.md 第 111 行也佐证：基线 OpenCode (v0.2.0) 中"文生图 | Mock (不存在)"
+
+**结论：唯一方案就是我们的自定义 text-to-image.ts，没有替代选项。**
+
+##### 调研结果 2：可用图像模型只有 gpt-image-2
+
+测试了创智 API 上的所有图像相关模型：
+
+| 模型 | 结果 | 响应时间 |
+|------|------|---------|
+| **gpt-image-2** | ✅ 可用 | 20s ~ 180s+ |
+| gemini-2.5-flash-image | ❌ HTTP 500 | 0.6s（即时报错） |
+| gemini-3.1-flash-image-preview | ❌ HTTP 500 | 0.6s（即时报错） |
+| gemini-3-pro-image-preview | 未测试 | 推测同 gemini 系列 |
+
+Gemini 系列报错：`"not supported model for image generation, only imagen models are supported"` — 该 API 代理的 `/v1/images/generations` 端点仅支持 OpenAI 格式的图像模型。
+
+**结论：gpt-image-2 是唯一可用的图像生成模型，无需考虑切换。**
+
+##### 调研结果 3：API 响应时间不稳定的根因分析
+
+三次独立测试的耗时数据：
+
+| 测试时间 | 模型 | 尺寸 | 耗时 | 结果 |
+|---------|------|------|------|------|
+| v0.3.0 测试 | gpt-image-2 | 1024² | 20-35s | ✅ 成功 |
+| v0.5.0 测试 | gpt-image-2 | 1024² | ~180s | ✅ 成功（偶有 timeout） |
+| 本次测试 #1 | gpt-image-2 | 1024² | >60s | ❌ timeout + socket hang up |
+| 本次测试 #2 | gpt-image-2 | 1024² | >180s | ❌ timeout |
+
+**不稳定原因分析**：
+
+1. **代理 API 排队延迟**：`apicz.boyuerichdata.com` 是一个中转代理，gpt-image-2 生成请求可能在服务端排队，高峰期延迟显著增加
+2. **模型计算密集**：gpt-image-2 是 OpenAI 的图像生成模型，1024×1024 分辨率本身就是计算密集型任务
+3. **时段影响**：v0.3.0 测试在下午（20-35s），本次测试在深夜（>180s timeout），可能与服务器负载时段有关
+4. **网络波动**：通过代理中转增加了额外网络跳数
+5. **超时设置策略**：当前 360s 超时是合理的，已经覆盖了最坏情况。不建议进一步增加（超过 6 分钟用户体验太差）
+
+#### 三、建议
+
+| 维度 | 建议 | 理由 |
+|------|------|------|
+| 模型选择 | 保持 gpt-image-2 | 唯一可用选项 |
+| 超时设置 | 保持 360s | 已覆盖最坏情况 |
+| 未来优化 | 考虑降级策略 | 超时后用 SVG 占位图替代 |
+| 答辩策略 | 如实说明 | API 响应时间是外部依赖，不影响系统架构价值 |
+| 替代方案 | 添加 text-to-image-simple.ts 的 CLI fallback | 当 Tool 模式超时时可回退到 CLI 独立调用 |
+
+#### 四、后续 TODO
+
+- [x] outputs 清理
+- [x] 文生图方案调研
+- [ ] 为 text-to-image Tool 添加超时降级策略（超时后自动生成 SVG 占位图）
+- [ ] 考虑支持不同尺寸以加速生成（如 512×512 用于快速预览）
+
+---
+
 ## 当前架构
 
 ```

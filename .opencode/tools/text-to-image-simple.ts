@@ -6,19 +6,63 @@ const API_BASE_URL = "https://apicz.boyuerichdata.com/v1";
 const API_KEY = "sk-KQRts8IEJesfFj06YYsPXuleWodDxIlZ2t5g2A3DJDk0XRvJ";
 
 const STYLE_PRESETS: Record<string, string> = {
-  logo: "abstract minimalist logo mark, clean geometric shapes, flat design, scalable, NO TEXT NO LETTERS, pure visual symbol only, white background",
-  mascot: "cute mascot character, friendly expression, clean design, NO TEXT",
-  product: "product photography, clean background, professional lighting, high quality",
-  illustration: "abstract editorial illustration, modern geometric style, brand colors, NO TEXT",
-  brand_image: "abstract brand texture, geometric pattern, studio lighting, NO TEXT",
+  logo:
+    "Abstract minimalist brand symbol in premium flat vector style. " +
+    "Clean geometric shapes with precise mathematical proportions — " +
+    "a pure visual mark that works at 16px and 16m. " +
+    "No gradients, no shadows, no embellishments — just essential form. " +
+    "Pure white background, centered composition, scalable. " +
+    "NO TEXT NO LETTERS NO CHINESE CHARACTERS — pure visual symbol only.",
+
+  mascot:
+    "Premium minimal vector illustration of a brand mascot character. " +
+    "Soft cel-shading with translucent gradients, elegant refined outlines — " +
+    "not cartoonishly thick, not photorealistic. " +
+    "The character has personality and presence — expressive bright eyes, " +
+    "a warm approachable expression, a dynamic yet composed pose. " +
+    "Clean edges, studio-quality rendering, full body centered composition. " +
+    "Pure white or transparent background. " +
+    "NO TEXT, NO LETTERS, NO NUMBERS, NO WATERMARKS, NO UI ELEMENTS.",
+
+  product:
+    "Premium product photography with clean minimal presentation. " +
+    "The product is the hero — centered, well-lit, every detail visible. " +
+    "Professional studio lighting: soft key light, gentle fill, subtle rim highlight. " +
+    "Pure white seamless background, commercial e-commerce grade. " +
+    "Macro detail visible — material texture, surface finish, build quality. " +
+    "NO WATERMARKS, NO UI ELEMENTS, NO DISTRACTING PROPS.",
+
+  illustration:
+    "Premium editorial illustration with conceptual depth. " +
+    "Modern geometric style, abstract shapes suggesting meaning without literal representation. " +
+    "Refined color palette, balanced composition, generous negative space. " +
+    "New Yorker magazine quality — sophisticated, intelligent, visually distinctive. " +
+    "NO TEXT NO LETTERS NO TYPOGRAPHY.",
+
+  brand_image:
+    "Abstract brand texture with premium material quality. " +
+    "Geometric pattern expressing brand identity through rhythm and proportion. " +
+    "Studio lighting revealing subtle surface detail — micro-texture, gentle emboss. " +
+    "Clean refined composition, generous margins, editorial quality. " +
+    "NO TEXT NO LETTERS NO WATERMARKS.",
 };
 
 function buildPrompt(userPrompt: string, style: string, colorScheme?: string): string {
   const styleSuffix = STYLE_PRESETS[style] || STYLE_PRESETS.logo;
-  let fullPrompt = `${userPrompt}, ${styleSuffix}`;
-  if (colorScheme) fullPrompt += `, ${colorScheme} color scheme`;
-  fullPrompt += ", no purple-pink gradient, no emoji, professional design, high quality";
-  return fullPrompt;
+
+  const parts = [userPrompt, styleSuffix];
+
+  if (colorScheme) {
+    parts.push(`Color palette: ${colorScheme}.`);
+  }
+
+  parts.push(
+    "No purple-pink gradient, no emoji, no cartoonish cliches. " +
+    "Professional studio-level quality, clean rendered edges. " +
+    "No text rendering artifacts, no garbled typography, no hallucinated letters."
+  );
+
+  return parts.join("\n");
 }
 
 async function main() {
