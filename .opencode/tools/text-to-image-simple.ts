@@ -78,36 +78,46 @@ async function main() {
   const fullPrompt = buildPrompt(prompt, style, colorScheme);
 
   console.log(`[text-to-image] 提示词: ${fullPrompt.substring(0, 200)}...`);
-  console.log(`[text-to-image] 模型: gpt-image-2, 尺寸: ${width}x${height}`);
+  console.log(`[text-to-image] 模型: gemini-2.5-flash-image, 尺寸: ${width}x${height}`);
 
   try {
-    const response = await fetch(`${API_BASE_URL}/images/generations`, {
+    const response = await fetch(`${API_BASE_URL}/chat/completions`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
-      body: JSON.stringify({ model: "gpt-image-2", prompt: fullPrompt, n: 1, size: `${width}x${height}` }),
+      body: JSON.stringify({
+        model: "gemini-2.5-flash-image",
+        messages: [{ role: "user", content: `Generate an image: ${fullPrompt}. The image should be ${width}x${height} pixels.` }],
+      }),
+      signal: AbortSignal.timeout(120000),
     });
 
     if (!response.ok) { const t = await response.text(); console.error(`HTTP ${response.status}: ${t}`); process.exit(1); }
 
     const data = await response.json();
-    if (!data.data || !data.data[0]) { console.error("无数据:", JSON.stringify(data)); process.exit(1); }
+    const messageContent = data.choices?.[0]?.message?.content;
+    if (!messageContent) { console.error("无数据:", JSON.stringify(data)); process.exit(1); }
 
-    const img = data.data[0];
     const fs = await import("fs/promises");
     const path = await import("path");
     const outputFile = path.resolve(outputPath);
     await fs.mkdir(path.dirname(outputFile), { recursive: true });
 
-    if (img.b64_json) {
-      const buffer = Buffer.from(img.b64_json, "base64");
+    let savedBytes = 0;
+    const base64Match = messageContent.match(/data:image\/[^;]+;base64,([A-Za-z0-9+/=]+)/);
+    if (base64Match && base64Match[1]) {
+      const buffer = Buffer.from(base64Match[1], "base64");
       await fs.writeFile(outputFile, buffer);
-      console.log(`✅ 已保存: ${outputPath} (${(buffer.length / 1024).toFixed(1)} KB)`);
-    } else if (img.url) {
-      const imgResp = await fetch(img.url);
-      const buffer = Buffer.from(await imgResp.arrayBuffer());
-      await fs.writeFile(outputFile, buffer);
-      console.log(`✅ 已保存: ${outputPath} (${(buffer.length / 1024).toFixed(1)} KB)`);
+      savedBytes = buffer.length;
+    } else if (messageContent.includes("http")) {
+      const urlMatch = messageContent.match(/https?:\/\/[^\s"]+\.(?:png|jpg|jpeg|gif|webp)/i);
+      if (urlMatch) {
+        const imgResp = await fetch(urlMatch[0], { signal: AbortSignal.timeout(60000) });
+        const buffer = Buffer.from(await imgResp.arrayBuffer());
+        await fs.writeFile(outputFile, buffer);
+        savedBytes = buffer.length;
+      }
     }
+    console.log(`✅ 已保存: ${outputPath} (${(savedBytes / 1024).toFixed(1)} KB)`);
   } catch (e: any) { console.error(`❌ ${e.message}`); process.exit(1); }
 }
 
