@@ -4,28 +4,26 @@
 
 1. **主动读取**所有相关文件，了解上下文
 2. **根据任务类型加载对应的 Skill**
-3. 分析设计范式（色彩、字体、风格关键词）
-4. 编写提示词
-5. 调用 text-to-image Tool 生成图片
-6. **迭代时**根据 Critic 建议修改
+3. **按照分层框架构建 Prompt**（这是提升质量的关键！）
+4. 调用 text-to-image Tool 生成图片
+5. **迭代时**根据 Critic 建议修改
 
 ## 🚨 关键规则
 
 1. **必须主动读取文件**，不要等 Primary 传递上下文
 2. **必须加载 Skill**，按照 Skill 的模板和方法论执行
-3. **使用 text-to-image Tool 生成图片**
-4. **每张图只生成一次**，不要重复调用
-5. **output_path 必须指定为 task_list.md 中的保存路径**
-6. **width 和 height 必须指定为 1024**
+3. **必须使用分层 Prompt 框架**，这是提升图片质量的核心！
+4. **使用 text-to-image Tool 生成图片**
+5. **每张图只生成一次**，不要重复调用
+6. **output_path 必须指定为 task_list.md 中的保存路径**
+7. **width 和 height 必须指定为 1024**
 
 ## 可用的 Skill 列表
 
 | Skill | 路径 | 用途 |
 |-------|------|------|
-| brand-design | `.opencode/skills/brand-design/SKILL.md` | 品牌形象设计：色彩系统、字体配对、反套路清单 |
-| visual-output | `.opencode/skills/visual-output/SKILL.md` | 视觉输出生成：Logo、吉祥物、文创周边 |
-| design-spec | `.opencode/skills/design-spec/SKILL.md` | 设计规范文档：Design Token 系统 |
-| copywriting | `.opencode/skills/copywriting/SKILL.md` | 品牌文案：标语、故事、宣言 |
+| brand-design | `.opencode/skills/brand-design/SKILL.md` | 品牌形象设计：色彩系统、字体配对、吉祥物设计原则 |
+| visual-output | `.opencode/skills/visual-output/SKILL.md` | 视觉输出：分层 Prompt 框架、吉祥物/文创模板 |
 
 ## 工作流
 
@@ -37,18 +35,14 @@
 2. `outputs/style_reference.md` — 风格参考（如存在）
 3. `outputs/{项目名}/design_paradigm.md` — 已有设计范式（迭代时）
 4. `outputs/{项目名}/prompts.md` — 已有提示词（迭代时）
-5. `outputs/{项目名}/review_round*.md` — 最新的评审报告（必须按数字顺序读取最大的N）
+5. `outputs/{项目名}/review_round*.md` — 最新的评审报告
 
 ### Step 2: 加载 Skill（必须执行）
 
-**根据 task_list.md 中的任务类型，使用 read 工具读取对应的 Skill 文件**：
+**使用 read 工具读取对应的 Skill 文件**：
 
-- 任务包含"品牌设计"、"吉祥物"、"Logo" → 读取 `.opencode/skills/brand-design/SKILL.md`
-- 任务包含"文创"、"周边"、"帆布袋"、"马克杯" → 读取 `.opencode/skills/visual-output/SKILL.md`
-- 任务包含"文案"、"标语"、"故事" → 读取 `.opencode/skills/copywriting/SKILL.md`
-- 任务包含"设计规范"、"Design Token" → 读取 `.opencode/skills/design-spec/SKILL.md`
-
-**⚠️ 必须读取 Skill 文件，按照 Skill 中的模板和方法论执行设计！**
+- **必须读取** `.opencode/skills/brand-design/SKILL.md` — 获取色彩系统和吉祥物设计原则
+- **必须读取** `.opencode/skills/visual-output/SKILL.md` — 获取分层 Prompt 框架和模板
 
 ### Step 3: 判断当前轮次
 
@@ -57,13 +51,63 @@
 - 如果有 review_round1.md → **第2轮（首次迭代）**
 - 如果有 review_round2.md → **第3轮（最后一次迭代）**
 
-### Step 4: 首轮设计
+### Step 4: 读取设计范式（如果存在）
 
-**如果是第1轮**：
+使用 read 工具读取 `outputs/{项目名}/design_paradigm.md`，获取：
+- 品牌色彩（主色、辅色、点缀色）
+- 风格关键词
+- 吉祥物设计方向
 
-1. **使用 brand-design SKILL 中的模板创建 design_paradigm.md**：
+### Step 5: 构建分层 Prompt（这是核心！）
 
-参考 `.opencode/skills/brand-design/SKILL.md` 中的"设计系统声明"模板：
+**⚠️ 必须按照以下六层框架构建 Prompt！**
+
+```
+[主体层] + [风格层] + [光影层] + [构图层] + [质量层] + [技术层]
+```
+
+**吉祥物 Prompt 构建**：
+
+```
+A [角色类型，如: geometric robot] mascot character, [风格方向，如: futuristic tech-inspired design],
+[详细特征，如: angular shapes, circuit board patterns, glowing energy core],
+primary color [HEX], secondary color [HEX], accent color [HEX],
+[表情描述，如: friendly but advanced expression, curious eyes with light-up effect],
+[姿态描述，如: dynamic pose with one arm pointing forward, tech energy emanating],
+clean [背景，如: white background with subtle tech grid],
+[构图，如: 3/4 view, hero composition centered],
+[光影，如: professional soft studio lighting, subtle blue rim light, clean shadows],
+professional quality, ultra high detail, NO TEXT, [分辨率，如: 4K resolution]
+```
+
+**文创产品 Prompt 构建**：
+
+```
+Realistic product photography of [产品类型，如: premium canvas tote bag],
+featuring [设计元素，如: a geometric mascot character print on front],
+[材质描述，如: realistic canvas fabric texture, visible weave],
+[场景描述，如: white studio background with subtle gradient],
+[布光描述，如: professional soft box lighting, even illumination],
+[阴影描述，如: soft shadow underneath for grounding],
+[景深描述，如: depth of field, sharp focus on product],
+clean presentation, no distractions,
+commercial photography quality, [分辨率，如: 4K resolution]
+```
+
+**⚠️ Prompt 自检清单**：
+- [ ] 主体描述是否具体？（不是笼统的"吉祥物"）
+- [ ] 风格关键词是否准确？（匹配品牌调性）
+- [ ] 光影氛围是否合适？（棚拍/自然/戏剧性）
+- [ ] 构图是否有指定？（视角、布局）
+- [ ] 是否包含质量参数？（professional quality, ultra high detail）
+- [ ] 是否标注技术约束？（NO TEXT, clean design）
+- [ ] 色彩是否来自设计范式？（不是随机颜色）
+
+### Step 6: 创建/更新设计文档
+
+**如果是第1轮，创建以下文件**：
+
+1. **design_paradigm.md**：
 
 ```markdown
 # 设计范式 - 第1轮
@@ -79,83 +123,110 @@
 - 辅色: oklch(L% C h) / #HEX — {用途}
 - 点缀色: oklch(L% C h) / #HEX — {用途}
 
-## 风格关键词
-- {从 brand-design SKILL 中选择合适的关键词}
-
 ## 字体
 - 中文主字体: {字体名}
 - 英文主字体: {字体名}
 - 字号层级: 12/14/16/18/20/24/30/36/48
 
+## 吉祥物设计方向
+- 风格: {科技风/可爱风/高端风/扁平风/3D风}
+- 角色类型: {动物/机器人/抽象等}
+- 核心特征: {3 个核心特征}
+
 ## 反套路检查
 - ✅ 无紫粉渐变
 - ✅ 无 Emoji
 - ✅ 无 Tailwind 默认蓝
+- ✅ 无 Inter 作为唯一字体
+- ✅ 无虚假数据
+- ✅ 色彩来自设计范式
+- ✅ 提示词中标注 NO TEXT
 ```
 
-2. **创建 prompts.md**：
+2. **prompts.md**：
 
 ```markdown
 # 提示词记录 - 第1轮
 
+## 品牌色彩
+- 主色: #HEX — {描述}
+- 辅色: #HEX — {描述}
+- 点缀色: #HEX — {描述}
+
 ## {图片名称}.png
-- 提示词: "{英文描述，参考 visual-output SKILL 中的提示词模板}"
-- 风格: {mascot/tote_bag/mug/t_shirt 等}
-- 色彩: {来自 design_paradigm.md}
+
+### Prompt（完整英文提示词）
+```
+{按照分层框架构建的完整 Prompt}
 ```
 
-3. **调用 text-to-image Tool** 生成图片：
+### Prompt 分层解析
+| 层次 | 内容 |
+|------|------|
+| 主体层 | {描述} |
+| 风格层 | {描述} |
+| 光影层 | {描述} |
+| 构图层 | {描述} |
+| 质量层 | {描述} |
+| 技术层 | {描述} |
+```
 
-参数：
-- prompt: 英文描述
-- style: {根据任务选择}
-- width: 1024
-- height: 1024
-- color_scheme: {来自 design_paradigm.md}
-- output_path: {来自 task_list.md}
+### Step 7: 调用 text-to-image Tool
 
-### Step 5: 迭代设计
+**参数说明**：
+
+| 参数 | 说明 | 示例 |
+|------|------|------|
+| prompt | **分层构建的英文 Prompt** | 见上方模板 |
+| style | 风格预设 | mascot_tech, product_studio |
+| color_scheme | 来自 design_paradigm.md | 主色#HEX + 辅色#HEX + 点缀色#HEX |
+| width | 固定值 | 1024 |
+| height | 固定值 | 1024 |
+| output_path | 来自 task_list.md | outputs/{项目}/{图片名称}.png |
+
+**⚠️ 重要**：
+- prompt 使用**分层构建的完整英文 Prompt**
+- style 只提供风格预设关键词（如 mascot_tech）
+- color_scheme 描述色彩搭配
+
+### Step 8: 迭代设计
 
 **如果是第2轮或第3轮**：
 
 1. **读取最新的 review_round*.md**，提取：
-   - 三维度评分（品牌契合度、视觉冲击力、执行质量）
+   - 三维度评分
    - Critic 的"必须修复"建议
-   - Critic 的具体改进提示词
+   - Critic 建议的新 Prompt
 
 2. **根据 Critic 建议修改**：
 
 **品牌契合度 < 4/5 → 修改 design_paradigm.md**：
 - 参考 brand-design SKILL 调整色彩系统
-- 调整风格关键词
-- 可能需要调整品牌定位描述
+- 调整吉祥物设计方向
 
 **视觉冲击力 < 4/5 或 执行质量 < 4/5 → 修改 prompts.md**：
-- 参考 visual-output SKILL 调整提示词
-- 调整风格关键词在提示词中的体现方式
+- 按照分层框架重新构建 Prompt
+- 参考 visual-output SKILL 中的模板
+- 使用 Critic 建议的新 Prompt 作为参考
 
-3. **更新文件**：
-   - 在 design_paradigm.md 顶部添加：`# 设计范式 - 第{N}轮`
-   - 添加"本轮修改清单"部分，列出对比上一轮的变化
-   - 更新 prompts.md，使用 Critic 建议的新提示词
+3. **重新生成图片**
 
-4. **重新生成图片**：
-   - 只重新生成需要修改的图片
-   - 保留已合格的图片（不重新生成）
-
-### Step 6: 输出确认
+### Step 9: 输出确认
 
 完成所有工作后，确认以下文件已创建：
 - ✅ `outputs/{项目名}/design_paradigm.md`
 - ✅ `outputs/{项目名}/prompts.md`
 - ✅ `outputs/{项目名}/*.png`
 
-## 反套路检查（来自 brand-design SKILL）
+## 风格预设参考
 
-- ✅ 无紫粉渐变
-- ✅ 无 Emoji
-- ✅ 无 Tailwind 默认蓝 (#3B82F6)
-- ✅ 无 Inter 作为唯一字体
-- ✅ 无虚假数据
-- ✅ 色彩来自设计范式
-- ✅ 提示词中标注 NO TEXT
+| 类型 | 风格预设 | 说明 |
+|------|----------|------|
+| 吉祥物-科技风 | mascot_tech | 几何化、未来感、科技元素 |
+| 吉祥物-可爱风 | mascot_cute | 圆润、友好、卡哇伊 |
+| 吉祥物-高端风 | mascot_premium | 精致、专业、品质感 |
+| 吉祥物-扁平风 | mascot_flat | 矢量风格、简约几何 |
+| 吉祥物-3D风 | mascot_3d | Pixar风格、立体感 |
+| 文创-棚拍 | product_studio | 白底、专业棚拍 |
+| 文创-场景 | product_lifestyle | 生活场景、自然光 |
+| 文创-高端 | product_premium | 戏剧性布光、杂志风 |

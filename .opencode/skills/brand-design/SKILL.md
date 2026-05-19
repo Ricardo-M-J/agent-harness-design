@@ -1,275 +1,336 @@
 ---
 name: brand-design
-description: 品牌形象设计：反套路清单 + oklch色彩系统 + 6组色彩x字体配对 + 6步工作流
+description: 品牌设计 Skill：品牌形象设计、吉祥物设计、色彩系统、字体配对、反套路清单
 ---
 
-# Brand Design Skill — 品牌形象设计
+# Brand Design Skill
 
-> 将设计品味编码为可执行规则。灵感来源：Claude Design / Open Design / web-design-skill
-
----
-
-## 一、Anti-AI-Cliché Blocklist（反套路禁止清单）
-
-在设计任何品牌视觉时，**严禁**使用以下 AI 生成内容中泛滥的模式：
-
-### 色彩禁令
-| 禁止 | 原因 | 替代方案 |
-|------|------|----------|
-| 紫-粉-蓝渐变 (`#7C3AED` → `#EC4899` → `#3B82F6`) | 90% AI 生成网页使用此渐变 | 使用 oklch 感知均匀色彩系统 |
-| 纯蓝 `#3B82F6` 作为主色 | Tailwind 默认蓝，无差异化 | 从 6 组精选配色中选择 |
-| 霓虹绿+深黑 (`#00FF00` + `#000000`) | 矩阵风套路，缺乏品牌感 | 用 oklch 创建有温度的暗色方案 |
-| 白色背景 + 蓝色按钮的 SaaS 标配 | 千篇一律 | 探索深色/暖色/大地色背景 |
-
-### 字体禁令
-| 禁止 | 原因 | 替代方案 |
-|------|------|----------|
-| Inter 作为唯一字体 | 最泛滥的 AI 生成字体 | 作为辅助字体，搭配有特色的主字体 |
-| Roboto | Material Design 默认，无个性 | Space Grotesk / Outfit / 思源黑体 |
-| Arial | 默认回退字体，缺乏设计感 | 从字体配对方案中选择 |
-| system-ui / -apple-system | 懒惰的系统回退 | 明确指定品牌字体栈 |
-
-### 视觉元素禁令
-| 禁止 | 原因 | 替代方案 |
-|------|------|----------|
-| 🚀⚡✨💡🔥 等 Emoji 替代图标 | 传达出不专业感 | 使用 `[icon]` 占位符或 SVG 几何图形 |
-| 大圆角卡片堆叠 (24px+ border-radius) | Cookie-cutter SaaS 外观 | 差异化圆角策略（卡片 12px/按钮 8px/输入框 4px） |
-| 彩色左边框 accent card | AI 生成的签名套路 | 通过阴影层级/排版对比/留白划分层级 |
-| 虚假数据 ("10,000+ 用户" "99.9% 满意度") | 不可信，降低品牌可信度 | 询问真实数据或使用 `[数据待填充]` |
-| 虚假客户 Logo 墙 (一排灰色方块) | 一眼假的 AI 生成 | 使用 `[合作伙伴 logo]` 占位符 |
-| 虚假推荐语 + 圆形头像 | AI 内容农场既视感 | 使用 `[客户引言]` 占位符 |
-
-### 布局禁令
-| 禁止 | 原因 | 替代方案 |
-|------|------|----------|
-| 居中大标题 + 居中副标题 + 居中 CTA | 缺乏视觉张力 | 非对称布局、轴向构图、留白节奏 |
-| 三列 feature 卡片 (icon + title + desc) | 最泛滥的 SaaS 布局 | 交错布局、bento grid、瀑布流 |
-| Hero 区域巨大的紫色渐变模糊背景 | AI 生成网页的标志 | 使用品牌色的微妙纹理/几何图案 |
+品牌设计的核心方法论，包含品牌形象设计、吉祥物设计、色彩系统和反套路清单。
 
 ---
 
-## 二、oklch 感知均匀色彩系统
+## 1. 品牌形象设计原则
 
-### 为什么是 oklch 而非 HSL？
+### 1.1 品牌设计系统声明
 
-HSL 的明度（L）在不同色相下感知不一致。黄色的 `hsl(60, 100%, 50%)` 和蓝色的 `hsl(240, 100%, 50%)` 在 HSL 中明度相同，但人眼感知的亮度差异巨大。
-
-oklch 使用 **L** (感知明度) + **C** (色度/饱和度) + **h** (色相)：
-- 相同的 L 值 = 相同的感知亮度
-- 锁定 C 和 h，仅变化 L → 视觉一致的色阶
-- 更适合无障碍设计（WCAG 对比度计算）
-
-### oklch 色阶生成法
-
-```
-主色：
-  --color-primary-50:  oklch(97% 0.02 <hue>)
-  --color-primary-100: oklch(92% 0.04 <hue>)
-  --color-primary-200: oklch(85% 0.06 <hue>)
-  --color-primary-300: oklch(75% 0.10 <hue>)
-  --color-primary-400: oklch(65% 0.15 <hue>)
-  --color-primary-500: oklch(55% 0.20 <hue>)  ← 基准
-  --color-primary-600: oklch(45% 0.18 <hue>)
-  --color-primary-700: oklch(35% 0.14 <hue>)
-  --color-primary-800: oklch(25% 0.08 <hue>)
-  --color-primary-900: oklch(15% 0.04 <hue>)
-
-中性灰阶（锁定 hue=260, chroma≈0.01）：
-  --color-gray-50:  oklch(98% 0.01 260)
-  --color-gray-100: oklch(93% 0.01 260)
-  --color-gray-500: oklch(55% 0.01 260)
-  --color-gray-900: oklch(15% 0.01 260)
-```
-
----
-
-## 三、6 组精选色彩×字体配对
-
-### 1. 现代科技 (Modern Tech)
-- **主色**: Blue-Violet `oklch(55% 0.25 260)` — 冷静、专业、创新
-- **辅助色**: Cool Gray `oklch(90% 0.01 250)` + Accent Cyan `oklch(70% 0.15 200)`
-- **中文字体**: 思源黑体 (Noto Sans SC) — 现代几何感
-- **英文主字体**: Space Grotesk — 几何无衬线，科技感
-- **英文字体**: Inter — 高可读性 UI 字体
-- **适用**: SaaS、开发者工具、AI 产品、科技教育
-
-### 2. 优雅人文 (Elegant Editorial)
-- **主色**: Warm Brown `oklch(35% 0.08 30)` — 温暖、知性、经典
-- **辅助色**: Cream `oklch(97% 0.02 80)` + Accent Gold `oklch(75% 0.12 85)`
-- **中文字体**: 思源宋体 (Noto Serif SC) — 人文气质
-- **英文主字体**: Newsreader — 现代衬线，编辑感
-- **英文辅助字体**: Outfit — 几何无衬线，现代平衡
-- **适用**: 内容平台、教育机构、出版社、博客
-
-### 3. 高级品牌 (Premium Brand)
-- **主色**: Near-Black `oklch(18% 0.01 260)` — 克制、高端、永恒
-- **辅助色**: Warm White `oklch(98% 0.01 100)` + Accent Gold `oklch(80% 0.12 90)`
-- **中文字体**: 阿里巴巴普惠体 (Alibaba PuHuiTi) — 现代、专业
-- **英文主字体**: Sora — 几何现代，高端感
-- **英文辅助字体**: Plus Jakarta Sans — 温暖的人文无衬线
-- **适用**: 奢侈品牌、金融机构、高端服务、商学院
-
-### 4. 活力消费 (Lively Consumer)
-- **主色**: Coral `oklch(68% 0.18 20)` — 温暖、活力、亲和
-- **辅助色**: Soft Cream `oklch(96% 0.02 70)` + Accent Teal `oklch(55% 0.12 190)`
-- **中文字体**: 得意黑 (Smiley Sans) — 圆润、友好
-- **英文主字体**: Plus Jakarta Sans — 温暖圆润
-- **英文辅助字体**: Outfit — 几何现代
-- **适用**: 电商、社交平台、消费品牌、儿童教育
-
-### 5. 极简专业 (Minimal Professional)
-- **主色**: Teal-Blue `oklch(50% 0.12 200)` — 理性、可信、高效
-- **辅助色**: Cool White `oklch(99% 0.005 240)` + Accent Slate `oklch(30% 0.02 250)`
-- **中文字体**: 霞鹜文楷 (LXGW WenKai) — 简洁、现代中文
-- **英文主字体**: Outfit — 几何无衬线
-- **英文辅助字体**: Space Grotesk — 技术感平衡
-- **适用**: 仪表盘、B2B 平台、数据产品、政务系统
-
-### 6. 手工温暖 (Artisan Warmth)
-- **主色**: Caramel `oklch(55% 0.12 80)` — 自然、手工、温度
-- **辅助色**: Parchment `oklch(95% 0.03 90)` + Accent Olive `oklch(45% 0.10 140)`
-- **中文字体**: 小赖体 (XiaoLai) — 手写感
-- **英文主字体**: Caveat — 手写风格
-- **英文辅助字体**: Newsreader — 衬线平衡
-- **适用**: 餐饮、手工艺、自然教育、生活方式品牌
-
----
-
-## 四、设计系统声明模板（Design Tokens First）
-
-在开始任何具体设计之前，必须**先声明设计 Token**。使用以下模板：
+创建 `design_paradigm.md` 时，必须包含以下内容：
 
 ```markdown
-## 设计系统声明
+# 设计范式 - 第{N}轮
 
-### 品牌基础
+## 品牌基础
 - 品牌名称：[名称]
-- 品牌定位：[一句话]
+- 品牌定位：[一句话定位]
 - 品牌个性：[3-5 个形容词]
 - 目标受众：[描述]
+- 差异化方向：[与竞品的区分]
 
-### 色彩 (oklch)
-- 主色 (Primary): oklch(L% C h) — [用途]
-- 辅助主色 (Secondary): oklch(L% C h) — [用途]
-- 点缀色 (Accent): oklch(L% C h) — [用途]
-- 背景色 (Background): oklch(L% C h)
-- 文字色 (Foreground): oklch(L% C h)
-- 中性灰阶 (Gray Scale): oklch(L% 0.01 hue) 50→900
-- 语义色 (Semantic): Success/Warning/Error/Info
+## 色彩系统 (oklch)
 
-### 字体
-- 中文主字体: [字体名] — [用途层级]
-- 中文辅助字体: [字体名]
-- 英文主字体: [字体名] — [用途层级]
-- 英文辅助字体: [字体名]
-- 代码字体: JetBrains Mono / Fira Code
-- 字号层级: 12/14/16/18/20/24/30/36/48/60/72
+### 主色 (Primary)
+- 色值: oklch(L% C h) / #HEX
+- 用途: [主要视觉元素，如 Logo、核心按钮]
+- 占比: 60%
+- 色彩心理: [传达的情感]
 
-### 间距 (4px 基准)
-- xs: 4px / sm: 8px / md: 16px / lg: 24px / xl: 40px / 2xl: 64px
-- 内容最大宽度: 1200px (桌面) / 100% (移动)
+### 辅助主色 (Secondary)
+- 色值: oklch(L% C h) / #HEX
+- 用途: [辅助元素，如图标、背景]
+- 占比: 30%
 
-### 圆角策略
-- 卡片: 12px / 按钮: 8px / 输入框: 4px / 标签: 9999px (全圆角)
-- 模态框: 16px / 图标容器: 8px
+### 点缀色 (Accent)
+- 色值: oklch(L% C h) / #HEX
+- 用途: [强调元素，如提示、亮点]
+- 占比: 10%
 
-### 阴影层级
-- elevation-1 (微妙): 0 1px 3px rgba(0,0,0,0.08)
-- elevation-2 (卡片): 0 4px 12px rgba(0,0,0,0.10)
-- elevation-3 (悬浮): 0 8px 24px rgba(0,0,0,0.12)
-- elevation-4 (模态): 0 16px 48px rgba(0,0,0,0.18)
+## 字体
 
-### 动效规范
-- micro (微交互): 150ms ease-out
-- standard (过渡): 250ms ease-in-out
-- emphasis (进入): 400ms ease-out [cubic-bezier(0.34,1.56,0.64,1)]
-- page (页面): 500ms ease-in-out
+### 中文字体
+- 主字体: [字体名] — [用途层级]
+- 备选: [备选字体]
+
+### 英文字体
+- 主字体: [字体名] — [用途层级]
+- 备选: [备选字体]
+
+### 字号层级
+- 标题: 24/30/36/48
+- 正文: 14/16/18
+- 说明: 12
+
+## 风格关键词
+- [3-5 个核心风格词]
+
+## 反套路检查清单
+- ✅ 无紫粉渐变
+- ✅ 无 Emoji
+- ✅ 无 Tailwind 默认蓝 (#3B82F6)
+- ✅ 无 Inter 作为唯一字体
+- ✅ 无虚假数据
+- ✅ 色彩来自设计范式
+- ✅ 提示词中标注 NO TEXT
 ```
 
 ---
 
-## 五、6 步品牌设计工作流
+## 2. 吉祥物设计原则（Mascot Design）
 
-### Step 0: ⚠️ 文字渲染铁律（必读）
+### 2.1 角色设计五原则
 
-**AI 图像生成模型无法正确渲染文字（尤其中文）。** 任何含品牌名称、标语、中文文字的 Logo/海报/名片，必须使用 SVG（`<text>` 标签）或 HTML/CSS，**绝对不要**用 AI 文生图工具生成含文字的最终交付物。
+**原则 1：剪影辨识度**
+- 远距离观看时，轮廓可识别
+- 使用独特的轮廓形状
+- 避免通用圆形或椭圆
 
-| Logo 类型 | 正确方式 | 错误方式 |
-|-----------|----------|----------|
-| 图形 Logo（纯符号） | ✅ SVG `<path>` 或 AI 图像（作为灵感） | — |
-| 文字 Logo（含品牌名） | ✅ SVG `<text>` 标签 | ❌ AI 图像生成 |
-| 组合 Logo（图形+文字） | ✅ SVG（图形路径 + text 标签） | ❌ AI 图像生成 |
+**原则 2：比例控制**
+- 头身比：1:1（可爱）到 1:3（成熟）
+- 元素协调：身体各部分比例合理
+- 避免极端比例
 
-### Step 1: 理解需求 (Understand)
-- 提取品牌名称、行业、定位、目标受众
-- 理解设计偏好（风格/色彩倾向/禁忌）
-- 信息不足时主动询问，不猜测
-- **决策表**：
-  - "做个 Logo"（无任何上下文） → 充分询问
-  - "为 XX 教育品牌设计 VI"（有名称+行业） → 询问定位和受众
-  - "按照这个 PRD 设计品牌"（有完整文档） → 直接开始
+**原则 3：表情设计**
+- 情绪传达清晰
+- 亲和力与专业感平衡
+- 避免过于复杂的面部细节
 
-### Step 2: 收集上下文 (Gather Context)
-- 搜索品牌/行业相关信息（websearch）
-- 了解竞品视觉风格（webfetch）
-- 理解目标受众的审美偏好
-- **不要从零开始**：总有可以参考的行业案例
+**原则 4：姿态动态**
+- 故事感：有行为意图
+- 动态感：不是静止站立
+- 避免僵硬的正面站立
 
-### Step 3: 声明设计系统 (Declare Design System)
-- 使用上面的设计 Token 模板
-- 提供 2-3 个差异化色彩方向
-- 明确字体配对和层级
-- **在写任何具体设计之前完成此步骤**
+**原则 5：配色策略**
+- 主色 60%：占据主导地位
+- 辅色 30%：增加层次
+- 点缀色 10%：突出重点
 
-### Step 4: v0 草稿 (v0 Draft)
-- Logo 概念草图（用 SVG 或文字描述）
-- 色彩方案可视化展示
-- 品牌关键词 moodboard
-- **这是便宜的 pivot 点**——方向不对可以低成本调整
+### 2.2 吉祥物风格方向
 
-### Step 5: 完整设计 (Full Build)
-- Logo 设计（主标志 + 文字标志 + 单色版本 + 最小尺寸规范）
-- 品牌色彩完整规范（含 oklch + HEX + RGB + CMYK）
-- 字体层级系统
-- 辅助图形/图案系统
-- 品牌应用示例（名片/信纸/PPT/社交媒体）
-- 图标风格规范
+| 风格 | 特点 | 适用场景 | Prompt 关键词 |
+|------|------|----------|---------------|
+| **科技风** | 几何化、简洁、未来感 | 科技品牌、SaaS | geometric, tech elements, circuit patterns, futuristic |
+| **可爱风** | 圆润、友好、卡哇伊 | 儿童品牌、消费品 | rounded forms, kawaii, soft colors, friendly |
+| **高端风** | 精致、专业、品质感 | 高端品牌、企业 | premium feel, refined details, sophisticated |
+| **扁平风** | 矢量、简约、易识别 | 互联网品牌 | flat illustration, vector style, bold colors |
+| **3D风** | 立体、质感、 Pixar风 | 年轻品牌、数字产品 | 3D render, Pixar-style, volumetric, soft lighting |
 
-### Step 6: 自检验证 (Self-Check)
-- [ ] 所有色值来自声明的设计 Token，无 rogue 色值
-- [ ] 无 AI 套路（紫色渐变、Emoji 图标、Inter-only 等）
-- [ ] 字体层级清晰（h1 到 caption 至少 6 级）
-- [ ] 品牌一致性——所有交付物遵循同一个设计系统
-- [ ] 无障碍——关键文本 WCAG AA 对比度 (4.5:1+)
-- [ ] 中英文双语呈现
-- [ ] 无虚假数据/推荐语/数据
+### 2.3 吉祥物设计反套路
+
+**❌ 避免的错误**：
+- 过度复杂的设计（细节太多）
+- 无特征的圆脸（和其他品牌混淆）
+- 不协调的比例（头大身小、腿短等）
+- 过度拟人化（像真人而非角色）
+- 使用品牌名作为面部特征
+
+**✅ 正确的做法**：
+- 简洁的剪影，3 秒内可描述
+- 独特的特征元素（如特定的配饰、形状）
+- 符合品牌调性的比例
+- 有故事感的姿态
+- 使用配饰或符号传达品牌信息
+
+### 2.4 吉祥物 Prompt 模板
+
+**基础模板**：
+```
+A [角色类型] mascot character, [风格方向],
+primary color [HEX], secondary color [HEX], accent color [HEX],
+[表情描述], [姿态描述], [背景设置],
+clean design, NO TEXT, professional quality, high detail
+```
+
+**风格变体 Prompt**：
+
+科技风：
+```
+A geometric mascot character, futuristic design, 
+tech-inspired shapes, circuit board patterns, glowing accents,
+primary color #3B82F6, secondary color #10B981, accent color #F97316,
+confident expression, dynamic pose with tech elements,
+clean white background,
+professional quality, NO TEXT, high detail
+```
+
+可爱风：
+```
+A cute mascot character, kawaii style, rounded forms,
+soft pastel colors, friendly appearance,
+primary color #8B5CF6, secondary color #F472B6, accent color #FBBF24,
+happy expression, playful pose,
+clean pastel background,
+professional quality, NO TEXT, high detail
+```
+
+高端风：
+```
+A premium mascot character, sophisticated design, refined details,
+luxury feel, editorial quality,
+primary color #1E293B, secondary color #64748B, accent color #D4AF37,
+confident expression, elegant pose,
+minimal clean background,
+professional quality, NO TEXT, high detail
+```
 
 ---
 
-## 六、占位符哲学
+## 3. 色彩系统 (oklch)
 
-> **一个占位符传达"这里需要真实素材"。一个造假传达"我偷工减料"。**
+### 3.1 为什么使用 oklch
 
-| 缺失内容 | 使用占位符 | 禁止做法 |
-|----------|-----------|----------|
-| 图标 | `[icon: 课程]` SVG 方形占位 | 🎓 Emoji 替代 |
-| 图片 | `[image: 校园全景, 16:9]` 比例占位卡 | AI 生成的虚假照片 |
-| Logo | `[logo: 合作伙伴]` 文字占位 | 灰色方块/随机字母 |
-| 数据 | `[数据: 2025 年毕业生薪资]` | "10,000+ 学员" |
-| 推荐语 | `[引言: 学员姓名, 职位]` | "非常棒的课程！—— 张同学" |
+**oklch** 是感知均匀的色彩空间，比 HEX 和 RGB 更适合设计：
+
+- **L (Lightness)**: 亮度，0-100%
+- **C (Chroma)**: 色度，饱和度
+- **H (Hue)**: 色相，0-360°
+
+### 3.2 常用色彩参考
+
+| 色彩名称 | HEX | oklch | 色相 | 适用场景 |
+|----------|-----|-------|------|----------|
+| 科技蓝 | #3B82F6 | 62% 0.19 255 | 蓝色 | 科技、金融、企业 |
+| 深空蓝 | #1E40AF | 35% 0.20 255 | 深蓝 | 高端、科技 |
+| 活力橙 | #F97316 | 70% 0.17 50 | 橙色 | 活力、创意、电商 |
+| 日落橙 | #EA580C | 55% 0.18 45 | 深橙 | 警示、强调 |
+| 翡翠绿 | #10B981 | 70% 0.15 165 | 绿色 | 成长、自然、教育 |
+| 深空灰 | #1E293B | 20% 0.05 255 | 蓝灰 | 高端、稳重 |
+| 中性灰 | #64748B | 55% 0.05 255 | 灰蓝 | 文字、辅助 |
+| 活力紫 | #8B5CF6 | 65% 0.22 290 | 紫色 | 创意、个性 |
+| 中国红 | #DC2626 | 50% 0.22 25 | 红色 | 传统、热情 |
+| 玫瑰粉 | #EC4899 | 65% 0.20 350 | 粉红 | 女性、可爱 |
+
+### 3.3 配色原则
+
+**主色选择**：
+- 根据品牌调性选择主色相
+- 确保主色在不同背景下可读
+
+**辅色选择**：
+- 与主色形成对比但协调
+- 使用色相环上相邻 30-60° 的颜色
+
+**点缀色选择**：
+- 使用主色或辅色的互补色
+- 面积控制在 10% 以内
 
 ---
 
-## 七、输出规范
+## 4. 字体配对原则
 
-### 文件命名
-- `{项目名}_brand_strategy.md` — 品牌策略
-- `{项目名}_design_tokens.md` — 设计 Token
-- `{项目名}_logo_design.md` — Logo 设计
-- `{项目名}_color_spec.md` — 色彩规范
-- `{项目名}_typography.md` — 字体规范
-- `{项目名}_applications.md` — 品牌应用
-- `{项目名}_brand_page.html` — 品牌展示页
+### 4.1 推荐的字体组合
 
-### 输出目录
-所有输出保存到 `outputs/{项目名}/` 目录下。
+| 场景 | 中文字体 | 英文字体 | 风格 |
+|------|----------|----------|------|
+| 科技感 | 思源黑体 | Outfit | 现代、几何 |
+| 专业感 | 思源宋体 | Playfair Display | 传统、品质 |
+| 活泼感 | OPPO Sans | Poppins | 年轻、活力 |
+| 简约感 | 苹方 | SF Pro | 简洁、干净 |
+| 品质感 | 鸿蒙黑体 | Inter | 高端、平衡 |
+
+### 4.2 字体使用规则
+
+- **不要**只使用 Inter 作为唯一英文字体
+- **不要**混用超过 3 种字体
+- **中文优先**：中文和英文使用不同的字体家族
+
+---
+
+## 5. 反套路清单（Anti-AI-Cliché Blocklist）
+
+### 5.1 禁止使用的设计元素
+
+| 类别 | 禁止元素 | 替代方案 |
+|------|----------|----------|
+| **渐变** | 紫粉渐变 (#A855F7 → #EC4899) | 单色渐变或双色搭配 |
+| **配色** | Tailwind 默认蓝 (#3B82F6) | 自定义品牌色 |
+| **图标** | Emoji | 矢量图标 |
+| **字体** | Inter (唯一英文) | Outfit/Poppins/Space Grotesk |
+| **阴影** | Tailwind 默认阴影 | 自定义柔和阴影 |
+| **数据** | 虚假 Lorem ipsum | 真实内容或占位符 |
+
+### 5.2 图像生成禁止清单
+
+**吉祥物**：
+- ❌ 文字、字母、数字
+- ❌ 水印、签名
+- ❌ 模糊、过曝
+- ❌ 变形、失真
+
+**产品图**：
+- ❌ 非品牌色背景
+- ❌ 低质量渲染
+- ❌ 不真实的光影
+
+---
+
+## 6. 设计系统文件模板
+
+### 6.1 design_paradigm.md 完整模板
+
+```markdown
+# 设计范式 - 第{N}轮
+
+## 品牌基础
+- 品牌名称：[名称]
+- 品牌定位：[一句话定位]
+- 品牌个性：[3-5 个形容词]
+- 目标受众：[描述]
+- 差异化方向：[与竞品的区分]
+
+## 色彩系统 (oklch)
+
+### 主色 (Primary)
+- 色值: oklch(L% C h) / #HEX
+- 用途: [主要视觉元素]
+- 占比: 60%
+- 色彩心理: [传达的情感]
+
+### 辅助主色 (Secondary)
+- 色值: oklch(L% C h) / #HEX
+- 用途: [辅助元素]
+- 占比: 30%
+
+### 点缀色 (Accent)
+- 色值: oklch(L% C h) / #HEX
+- 用途: [强调元素]
+- 占比: 10%
+
+## 字体
+
+- 中文主字体: [字体名]
+- 英文主字体: [字体名]
+- 字号层级: 12/14/16/18/20/24/30/36/48
+
+## 吉祥物设计方向
+- 风格: [科技风/可爱风/高端风/扁平风/3D风]
+- 角色类型: [动物/人物/抽象/机器人等]
+- 核心特征: [3 个核心特征]
+- 配色比例: 主色60% + 辅色30% + 点缀色10%
+
+## 风格关键词
+- [3-5 个核心风格词]
+
+## 反套路检查
+- ✅ 无紫粉渐变
+- ✅ 无 Emoji
+- ✅ 无 Tailwind 默认蓝
+- ✅ 无 Inter 作为唯一字体
+- ✅ 无虚假数据
+- ✅ 色彩来自设计范式
+- ✅ 提示词中标注 NO TEXT
+```
+
+---
+
+## 7. 使用指南
+
+### 7.1 Designer 使用流程
+
+1. **读取任务清单** (`task_list.md`)
+2. **读取品牌设计 Skill** (本文件)
+3. **创建设计范式** (`design_paradigm.md`)
+   - 按照模板填写品牌基础
+   - 选择合适的色彩系统
+   - 确定吉祥物设计方向
+4. **生成提示词** (`prompts.md`)
+   - 根据吉祥物风格选择 Prompt 模板
+   - 填充具体内容
+5. **调用图像生成工具**

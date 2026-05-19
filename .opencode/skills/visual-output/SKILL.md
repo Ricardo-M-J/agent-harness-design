@@ -1,184 +1,423 @@
 ---
 name: visual-output
-description: 视觉资产生成：Logo(SVG) + 吉祥物(PNG) + 文创周边(PNG) + HTML品牌页面
+description: 视觉输出 Skill：吉祥物、文创产品图像生成的分层 Prompt 框架和模板
 ---
 
-# Visual Output Skill — 视觉资产生成
+# Visual Output Skill
 
-> 生成品牌视觉资产：Logo(SVG)、吉祥物(PNG)、文创周边(PNG)、HTML品牌页面
-
----
-
-## 功能概览
-
-| 输出类型 | 格式 | 工具 |
-|----------|------|------|
-| **Logo** | SVG | 直接输出代码 |
-| **吉祥物** | PNG | text-to-image 工具 |
-| **文创周边** | PNG | text-to-image 工具 |
-| **品牌页面** | HTML | 直接输出代码 |
+视觉资产生成的核心方法论，包含分层 Prompt 框架、吉祥物模板、文创产品模板和专业摄影术语。
 
 ---
 
-## 设计范式（参考创智学院风格）
+## 1. 分层 Prompt 构建框架
 
-### 色彩系统
+### 1.1 Prompt 层次结构
+
+构建高质量图像 Prompt 时，必须包含以下六个层次：
+
 ```
-主色: 极光蓝 #3B82F6 (oklch 55% 0.22 250) — 科技感
-辅色: 能量橙 #F97316 (oklch 72% 0.18 70) — 活力点缀
-深色: 深空蓝 #0F172A (oklch 18% 0.01 250) — 背景/文字
-中性: 星尘灰 #F0F2F8 (oklch 92% 0.01 270) — 浅色背景
-
-使用比例: 主色60% / 辅色30% / 深色10%
+[主体层] + [风格层] + [光影层] + [构图层] + [质量层] + [技术层]
 ```
 
-### 字体系统
+| 层次 | 内容 | 示例 |
+|------|------|------|
+| **主体层** | 角色/产品描述 | A cute robot mascot character |
+| **风格层** | 风格关键词 | kawaii style, rounded forms |
+| **光影层** | 光影氛围 | soft studio lighting, dramatic shadows |
+| **构图层** | 视角和布局 | 3/4 view, centered composition |
+| **质量层** | 质量参数 | professional quality, high detail |
+| **技术层** | 技术约束 | NO TEXT, clean design |
+
+### 1.2 分层构建示例
+
+**吉祥物 Prompt**：
 ```
-中文: 思源黑体 (Noto Sans SC) — 现代几何感
-英文: Outfit / Inter — 年轻现代
+A geometric mascot character (主体),
+futuristic design with tech elements (风格),
+soft studio lighting with subtle reflections (光影),
+3/4 view, dynamic pose (构图),
+professional quality, ultra high detail (质量),
+NO TEXT, clean white background (技术)
 ```
 
-### 风格特征
-- 深色背景 + 蓝色主调 + 橙色点缀
-- 几何化、简洁线条
-- 科技感但不冰冷，有活力但不幼稚
-- 圆角: 卡片12px / 按钮8px
+**产品摄影 Prompt**：
+```
+A canvas tote bag with printed design (主体),
+realistic product photography style (风格),
+professional studio lighting, soft shadows (光影),
+hero shot, centered composition (构图),
+commercial photography quality, high resolution (质量),
+clean background, no distractions (技术)
+```
 
 ---
 
-## 工作流
+## 2. 吉祥物 Prompt 模板
 
-### Step 1: 声明设计系统
-输出简洁的设计系统声明（颜色/字体/风格），保存到 `outputs/{项目}/design_system.md`
+### 2.1 基础模板
 
-### Step 2: 生成 Logo（SVG）
-
-**Logo 文字方案铁律**：
-> AI 图像生成模型无法正确渲染文字（尤其中文汉字）。Logo 必须用 SVG。
-
-**生成内容**：
-- 2-3 个 Logo 概念方案
-- 每个方案包含：全彩版本、单色版本、反白版本
-- 保存到 `outputs/{项目}/logo/` 目录
-
-**Logo 设计原则**：
-- 简洁几何图形，易于识别
-- 可单色使用（黑白稿）
-- 小尺寸（16px）仍可辨认
-- 避免复杂渐变
-- 文字用 `<text>` 标签，不用 AI 生成
-
-### Step 3: 生成吉祥物（PNG）
-
-使用 text-to-image 工具生成：
 ```
-风格: 扁平插画 / 3D卡通 / 几何抽象（根据品牌调性选择）
-色彩: 严格使用设计系统的颜色
-背景: 透明或纯色
-尺寸: 1024x1024
+A [角色类型] mascot character, [风格方向],
+primary color [HEX], secondary color [HEX], accent color [HEX],
+[表情描述], [姿态描述], [背景设置],
+[构图], [光影],
+professional quality, NO TEXT, high detail
 ```
 
-**提示词模板**：
+### 2.2 风格变体模板
+
+#### 科技风（Tech Style）
 ```
-[角色描述], [风格关键词], [色彩方案], [表情/姿态], 
-clean design, NO TEXT NO LETTERS, professional quality
+A [角色类型] mascot character, tech-inspired design,
+geometric shapes, circuit patterns, holographic accents,
+primary color [HEX], secondary color [HEX], accent color [HEX],
+[表情: confident/focused/curious],
+[姿态: dynamic pose with tech elements/pointing forward/holding device],
+clean white background,
+[构图: 3/4 view / hero shot],
+soft studio lighting with blue rim light,
+professional quality, NO TEXT, high detail, 4K resolution
 ```
 
-保存到 `outputs/{项目}/mascot.png`
+#### 可爱风（Cute Style）
+```
+A cute [角色类型] mascot character, kawaii style,
+rounded forms, soft edges, friendly appearance,
+primary color [HEX], secondary color [HEX], accent color [HEX],
+[表情: happy smile/bright eyes/warm gaze],
+[姿态: playful pose/bouncy stance/waving hand],
+clean pastel gradient background,
+[构图: close-up / full body centered],
+warm natural lighting, soft shadows,
+professional quality, NO TEXT, high detail, 4K resolution
+```
 
-### Step 4: 生成文创周边（PNG）
+#### 高端风（Premium Style）
+```
+A premium [角色类型] mascot character, sophisticated design,
+refined details, luxury feel, editorial quality,
+primary color [HEX], secondary color [HEX], accent color [HEX],
+[表情: confident smirk/stoic expression/noble bearing],
+[姿态: elegant pose/standing tall/confident stance],
+minimal dark background,
+[构图: portrait / asymmetric],
+dramatic lighting, rich shadows, rim light,
+professional quality, NO TEXT, ultra high detail, 8K resolution
+```
 
-使用 text-to-image 生成以下场景：
+#### 扁平风（Flat Style）
+```
+A flat illustration [角色类型] mascot character,
+vector art style, bold colors, clean shapes,
+primary color [HEX], secondary color [HEX], accent color [HEX],
+[表情: simple geometric expression],
+[姿态: iconic pose with clear silhouette],
+solid color background,
+[构图: full body / iconic hero shot],
+no shading, clean outlines,
+professional quality, NO TEXT, vector-style
+```
 
-| 品类 | 提示词要点 |
-|------|-----------|
-| **T恤** | 产品摄影，胸前 Logo 展示，面料质感 |
-| **徽章** | 金属珐琅工艺，圆形，安全别针 |
-| **笔记本** | 精装封面，烫金 Logo，桌面场景 |
-| **帆布袋** | 单面图案，自然褶皱，生活场景 |
-| **贴纸套装** | 多元素组合，透明背景，矢量风格 |
+#### 3D风（3D Style）
+```
+A 3D rendered [角色类型] mascot character,
+Pixar-style, volumetric, soft lighting,
+primary color [HEX], secondary color [HEX], accent color [HEX],
+[表情: expressive/friendly/detailed face],
+[姿态: dynamic action pose/full body],
+environment background or studio setting,
+[构图: 3/4 view / cinematic],
+ subsurface scattering, soft shadows, depth of field,
+professional quality, NO TEXT, 3D render, 4K resolution
+```
 
-保存到 `outputs/{项目}/merch/` 目录
+### 2.3 吉祥物 Prompt 参考词汇
 
-### Step 5: 生成 HTML 品牌页面
+**角色类型**：
+- 动物：fox, owl, rabbit, cat, dog, bear, panda, dragon
+- 抽象：geometric creature, crystal being, energy form
+- 机器人：android, cyborg, AI assistant, droid
+- 人物：student, developer, explorer, mentor
+- 物体：rocket, lightbulb, book, computer
 
-将所有设计整合为可展示的 HTML 页面。
+**表情描述**：
+- 正面：happy, smiling, cheerful, excited, confident
+- 中性：curious, thoughtful, focused, calm, serene
+- 动态：surprised, laughing, winking, determined
 
-**必含模块**：
-1. Hero 区域（Logo + 标语）
-2. 品牌故事/理念
-3. 色彩系统展示
-4. 字体层级展示
-5. Logo 多版本展示
-6. 吉祥物展示
-7. 文创应用 mockup
-8. Footer
-
-保存到 `outputs/{项目}/brand_page.html`
+**姿态描述**：
+- 站立：standing tall, heroic stance, casual pose
+- 动态：running, jumping, flying, pointing
+- 手部：holding object, waving, thumbs up, gesturing
 
 ---
 
-## Anti-AI-Cliché 强制约束
+## 3. 文创产品 Prompt 模板
 
-| 禁止 | 替代 |
+### 3.1 棚拍风格（Studio Photography）
+
+```
+Realistic product photography of [产品类型],
+featuring [设计元素/吉祥物],
+professional studio setup,
+white background with subtle gradient,
+soft box lighting, even illumination,
+soft shadows on white,
+depth of field, sharp focus on product,
+clean edges, no distractions,
+commercial photography quality, high resolution
+```
+
+**示例 - 帆布袋**：
+```
+Realistic product photography of a premium canvas tote bag,
+featuring a geometric mascot character print on front,
+premium fabric texture, realistic shadows,
+white studio background,
+professional soft box lighting, even illumination,
+soft shadow underneath for grounding,
+depth of field, sharp focus on bag,
+clean presentation, no distractions,
+commercial photography quality, 4K resolution
+```
+
+**示例 - 马克杯**：
+```
+Realistic product photography of a ceramic mug,
+featuring a cute mascot design printed around,
+glossy ceramic material, realistic reflections,
+white studio background,
+professional lighting, subtle rim light,
+soft shadow underneath,
+depth of field, product in sharp focus,
+clean and minimal, commercial quality, 4K resolution
+```
+
+### 3.2 生活场景风格（Lifestyle Photography）
+
+```
+Realistic lifestyle product photography of [产品类型],
+featuring [设计元素/吉祥物],
+[场景描述: cozy coffee shop / modern desk / outdoor picnic / lifestyle setting],
+natural daylight, warm tones,
+authentic atmosphere, lifestyle context,
+shallow depth of field, product in focus,
+professional photography quality, high resolution
+```
+
+**示例 - 帆布袋**：
+```
+Realistic lifestyle product photography of a canvas tote bag,
+featuring a geometric mascot character print,
+placed on a wooden table in a cozy coffee shop,
+natural window light, warm afternoon atmosphere,
+next to a laptop and coffee cup,
+shallow depth of field, bag in sharp focus, soft bokeh background,
+authentic lifestyle scene, editorial quality, 4K resolution
+```
+
+**示例 - T恤**：
+```
+Realistic lifestyle product photography of a premium t-shirt,
+featuring a mascot character design printed on front,
+worn by a person or displayed on a mannequin,
+modern minimalist interior, natural lighting,
+casual lifestyle setting,
+shallow depth of field, shirt in focus,
+authentic and natural, editorial quality, 4K resolution
+```
+
+### 3.3 高端质感风格（Premium/Luxury）
+
+```
+Luxury product photography of [产品类型],
+featuring [设计元素/吉祥物],
+dramatic lighting, rich shadows,
+[材质描述: premium leather / glossy ceramic / metallic finish],
+magazine editorial style,
+[角度描述: hero shot / dramatic angle / overhead],
+ultra high detail, texture visible,
+professional finish, commercial quality, 8K resolution
+```
+
+**示例 - 马克杯**：
+```
+Luxury product photography of a premium ceramic mug,
+featuring an elegant mascot character design,
+glossy black ceramic with gold accents,
+dramatic studio lighting, rich shadows,
+gold rim detail, premium material texture visible,
+hero shot, slight angle,
+magazine editorial quality,
+ultra high detail, 8K resolution
+```
+
+### 3.4 文创产品专业术语
+
+**材质描述**：
+| 材质 | 英文描述 |
+|------|----------|
+| 帆布 | canvas texture, woven fabric, cotton material |
+| 陶瓷 | ceramic, porcelain, glossy finish, matte glaze |
+| 金属 | metallic finish, brushed metal, chrome accents |
+| 纸张 | paper stock, cardstock, matte paper |
+| 布料 | fabric texture, cotton blend, soft material |
+
+**布光术语**：
+| 类型 | 英文描述 |
+|------|----------|
+| 柔光箱 | soft box lighting, diffused light |
+| 伦勃朗 | Rembrandt lighting, dramatic side light |
+| 蝴蝶光 | butterfly lighting, paramount light |
+| 边缘光 | rim light, edge lighting, separation light |
+| 补光 | fill light, bounce light |
+
+---
+
+## 4. prompts.md 模板
+
+创建提示词记录文件：
+
+```markdown
+# 提示词记录 - 第{N}轮
+
+## 品牌色彩
+- 主色: [HEX] — [描述]
+- 辅色: [HEX] — [描述]
+- 点缀色: [HEX] — [描述]
+
+## [图片名称].png
+
+### 风格预设
+- 预设类型: [mascot_tech / mascot_cute / product_studio / etc.]
+- 风格方向: [具体风格]
+
+### Prompt（完整英文提示词）
+```
+[完整的英文 Prompt，按照分层框架构建]
+```
+
+### Prompt 分层解析
+| 层次 | 内容 |
 |------|------|
-| 紫粉渐变 `#7C3AED → #EC4899` | 品牌色 subtle 纹理/几何图案 |
-| Emoji 作为图标 🚀⚡✨ | SVG 几何图形 |
-| Inter 作为唯一字体 | 品牌字体配对 |
-| 大圆角卡片 24px | 差异化圆角策略 |
-| 虚假推荐语/数据 | 真实品牌宣言或 `[待填充]` |
-| 居中三列 feature 卡片 | Bento grid 或交错布局 |
+| 主体层 | [描述] |
+| 风格层 | [描述] |
+| 光影层 | [描述] |
+| 构图层 | [描述] |
+| 质量层 | [描述] |
+| 技术层 | [描述] |
 
----
+### 色彩映射
+- 主色应用: [在图像中的具体应用位置]
+- 辅色应用: [在图像中的具体应用位置]
+- 点缀色应用: [在图像中的具体应用位置]
 
-## 输出清单
-
-```
-outputs/{项目名}/
-├── design_system.md           # 设计系统声明
-├── logo/
-│   ├── logo_full.svg          # 全彩Logo
-│   ├── logo_mono.svg          # 单色Logo
-│   └── logo_inverse.svg       # 反白Logo
-├── mascot.png                 # 吉祥物
-├── merch/
-│   ├── tshirt.png             # T恤
-│   ├── badge.png              # 徽章
-│   └── notebook.png           # 笔记本
-└── brand_page.html            # 品牌展示页面
+## [另一图片名称].png
+[同上格式]
 ```
 
 ---
 
-## 图像生成工具调用
+## 5. 图像质量参数
 
-### 创智 API 配置
-```typescript
-const API_BASE_URL = "https://apicz.boyuerichdata.com/v1";
-const MODEL = "gpt-image-2";
+### 5.1 分辨率和比例
+
+| 类型 | 推荐尺寸 | 比例 |
+|------|----------|------|
+| 社交媒体 | 1080x1080 | 1:1 |
+| 海报 | 1920x1080 | 16:9 |
+| 头像/Logo | 1024x1024 | 1:1 |
+| 故事/Stories | 1080x1920 | 9:16 |
+
+### 5.2 质量参数
+
+```
+professional quality,
+ultra high detail,
+high resolution,
+4K resolution,
+sharp focus,
+clean edges,
+no artifacts,
+no distortion
 ```
 
-### 调用示例
-```bash
-npx tsx .opencode/tools/text-to-image-simple.ts \
-  --prompt "cute mascot character, cloud-like starry creature" \
-  --style mascot \
-  --color_scheme "purple and gold" \
-  --output "outputs/{项目}/mascot.png"
-```
+### 5.3 负面提示词
 
-### 可用 style 预设
-- `logo` — Logo 标志
-- `mascot` — 吉祥物
-- `product` — 产品摄影（文创）
-- `illustration` — 插画
-- `brand_image` — 品牌纹理
+```
+blurry, low quality, distorted, pixelated,
+text, letters, words, watermark, signature,
+cropped, out of frame,
+deformed, disfigured, bad anatomy,
+oversaturated, undersaturated,
+amateur, stock photo look
+```
 
 ---
 
-## 质量标准
+## 6. 使用指南
 
-1. **图片质量**：1024x1024，清晰无噪点
-2. **色彩一致**：所有图片使用同一套设计系统颜色
-3. **Logo 可用**：SVG 可直接用于生产环境
-4. **页面展示级**：HTML 可在面试中投影展示
+### 6.1 Designer 使用流程
+
+1. **读取任务清单** (`task_list.md`)
+2. **读取设计范式** (`design_paradigm.md`)
+3. **读取视觉输出 Skill** (本文件)
+4. **构建分层 Prompt**
+   - 根据风格预设选择模板
+   - 按照六层框架填充内容
+   - 使用色彩心理学指导配色描述
+5. **生成 prompts.md**
+   - 记录完整 Prompt
+   - 标注分层解析
+6. **调用图像生成工具**
+
+### 6.2 Prompt 自检清单
+
+构建 Prompt 后，检查：
+
+- [ ] 主体描述是否具体？（不是笼统的"吉祥物"）
+- [ ] 风格关键词是否准确？（匹配品牌调性）
+- [ ] 光影氛围是否合适？（棚拍/自然/戏剧性）
+- [ ] 构图是否有指定？（视角、布局）
+- [ ] 是否包含质量参数？（professional quality）
+- [ ] 是否标注技术约束？（NO TEXT, clean design）
+- [ ] 色彩是否来自设计范式？（不是随机颜色）
+
+---
+
+## 7. 完整示例
+
+### 任务
+为"上海创智"教育科技品牌设计吉祥物（科技风）和帆布袋（棚拍风格）
+
+### 色彩
+- 主色：#3B82F6（科技蓝）
+- 辅色：#10B981（翡翠绿）
+- 点缀色：#F97316（活力橙）
+
+### 吉祥物 Prompt
+```
+A geometric robot mascot character, futuristic tech-inspired design,
+angular shapes, circuit board patterns, glowing energy core,
+primary color #3B82F6, secondary color #10B981, accent color #F97316,
+friendly but advanced expression, curious eyes with light-up effect,
+dynamic pose with one arm pointing forward, tech energy emanating,
+clean white background with subtle tech grid,
+3/4 view, hero composition centered,
+professional soft studio lighting, subtle blue rim light, clean shadows,
+professional quality, ultra high detail, NO TEXT, 4K resolution
+```
+
+### 帆布袋 Prompt
+```
+Realistic product photography of a premium canvas tote bag,
+featuring a geometric robot mascot character print on front,
+tech-inspired design in blue and green colors,
+realistic canvas fabric texture, visible weave,
+white studio background with subtle gradient,
+professional soft box lighting, even illumination,
+soft shadow underneath for grounding,
+depth of field, sharp focus on bag front,
+clean presentation, no distractions,
+commercial photography quality, 4K resolution
+```
