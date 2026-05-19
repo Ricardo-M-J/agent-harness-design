@@ -69,25 +69,20 @@
 2. `outputs/{项目名}/design_paradigm.md` — 了解设计范式和风格关键词
 3. `outputs/{项目名}/prompts.md` — 了解当前使用的提示词
 
-### Step 2: 使用 bash 读取并分析图片
+### Step 2: 使用 read 工具读取并分析图片
 
-**⚠️ 重要：必须使用 bash 工具读取图片，read 工具无法将图片传给多模态模型**
+**⚠️ 重要：直接使用 read 工具读取图片文件！read 工具支持多模态图片分析！**
 
-```bash
-# 1. 列出所有图片
-ls -la outputs/{项目名}/*.png
-
-# 2. 将图片转为 base64（以 mascot.png 为例）
-base64 -w 0 outputs/{项目名}/mascot.png > /tmp/mascot_base64.txt
-
-# 3. 读取 base64 内容（前 100 字符查看是否成功）
-head -c 100 /tmp/mascot_base64.txt
-```
+对每张图片使用 read 工具读取：
+- `outputs/{项目名}/mascot.png`
+- `outputs/{项目名}/tote_bag.png`
+- 其他生成的图片
 
 **分析图片时**：
-- 查看图片的实际内容（颜色、构图、元素）
-- 对照 design_paradigm.md 的色彩系统检查
-- 对照 task_list.md 的品牌调性检查
+- 查看图片的实际内容（颜色、构图、元素、风格）
+- 对照 design_paradigm.md 的色彩系统检查配色是否一致
+- 对照 task_list.md 的品牌调性检查风格是否匹配
+- 评估视觉冲击力和执行质量
 
 ### Step 3: 计算总分并判定
 
