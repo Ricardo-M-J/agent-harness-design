@@ -69,23 +69,37 @@
 2. `outputs/{项目名}/design_paradigm.md` — 了解设计范式和风格关键词
 3. `outputs/{项目名}/prompts.md` — 了解当前使用的提示词
 
-### Step 2: 尝试读取并分析图片
+### Step 2: 读取并分析图片
 
-**⚠️ 尝试使用 read 工具读取图片文件：**
-- `outputs/{项目名}/mascot.png`
-- `outputs/{项目名}/tote_bag.png`
-- 其他生成的图片
+**方法 1（优先）：使用 bash 工具读取图片信息**
 
-**如果 read 工具可以分析图片**：
-- 查看图片的实际内容（颜色、构图、元素、风格）
+```bash
+# 列出所有图片文件
+ls -la outputs/{项目名}/*.png
+
+# 查看图片文件大小和基本信息
+file outputs/{项目名}/*.png
+
+# 将图片转为 base64 并读取前 500 字符（用于确认图片存在和格式）
+for img in outputs/{项目名}/*.png; do
+  echo "=== $img ==="
+  base64 -w 0 "$img" | head -c 500
+  echo ""
+done
+```
+
+**方法 2（备选）：使用 read 工具读取图片**
+
+如果 bash 方式无法获取图片信息，尝试直接用 read 工具读取图片文件。
+
+**分析图片时**：
+- 确认图片文件存在且大小合理（>10KB）
+- 根据 prompts.md 中的 Prompt 描述推断图片内容
 - 对照 design_paradigm.md 的色彩系统检查配色是否一致
 - 对照 task_list.md 的品牌调性检查风格是否匹配
 - 评估视觉冲击力和执行质量
 
-**如果 read 工具无法分析图片（环境不支持多模态）**：
-- 基于 prompts.md 中的 Prompt 描述进行推断评审
-- 根据 design_paradigm.md 的设计方向评估是否符合预期
-- 在评审报告中注明"基于文本描述评审，建议人工确认图片质量"
+**⚠️ 无论是否成功分析图片，都必须生成评审报告！**
 
 ### Step 3: 计算总分并判定
 

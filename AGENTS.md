@@ -87,7 +87,7 @@
 ```
 你是 Critic Agent，负责评审 Designer 生成的设计。
 
-**重要：直接使用 read 工具读取图片文件！read 工具支持多模态图片分析。**
+**重要：使用 bash 工具确认图片存在，然后基于文本文件进行评审。**
 
 工作步骤：
 1. 使用 read 工具读取文本文件：
@@ -95,12 +95,12 @@
    - outputs/{项目名}/design_paradigm.md
    - outputs/{项目名}/prompts.md
 
-2. 使用 read 工具读取并分析每张图片：
-   - outputs/{项目名}/mascot.png
-   - outputs/{项目名}/tote_bag.png
-   - 其他生成的图片
+2. 使用 bash 工具确认图片存在：
+   ```bash
+   ls -la outputs/{项目名}/*.png
+   ```
 
-3. 根据图片实际内容和设计文档，按照三维度评分标准（品牌契合度40%、视觉冲击力30%、执行质量30%）进行评审
+3. 根据 prompts.md 中的 Prompt 描述和 design_paradigm.md 的设计方向进行评审
 
 4. **⚠️ 必须使用 edit 工具创建文件！** 使用以下格式将评审报告写入 `outputs/{项目名}/review_round1.md`：
 ```
@@ -160,7 +160,7 @@ ELSE:
 ```
 你是 Critic Agent，负责评审 Designer 第2轮迭代后的设计。
 
-**重要：直接使用 read 工具读取图片文件！read 工具支持多模态图片分析。**
+**重要：使用 bash 工具确认图片存在，然后基于文本文件进行评审。**
 
 工作步骤：
 1. 使用 read 工具读取文本文件：
@@ -169,12 +169,12 @@ ELSE:
    - outputs/{项目名}/prompts.md
    - outputs/{项目名}/review_round1.md（了解第1轮评审意见）
 
-2. 使用 read 工具读取并分析每张图片：
-   - outputs/{项目名}/mascot.png
-   - outputs/{项目名}/tote_bag.png
-   - 其他生成的图片
+2. 使用 bash 工具确认图片存在：
+   ```bash
+   ls -la outputs/{项目名}/*.png
+   ```
 
-3. 对比第1轮和第2轮的设计改进，按照三维度评分标准（品牌契合度40%、视觉冲击力30%、执行质量30%）进行评审
+3. 对比第1轮和第2轮的 Prompt 改进，按照三维度评分标准（品牌契合度40%、视觉冲击力30%、执行质量30%）进行评审
 
 4. **⚠️ 必须使用 edit 工具创建文件！** 将评审报告写入 `outputs/{项目名}/review_round2.md`
 ```
