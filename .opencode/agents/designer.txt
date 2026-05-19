@@ -103,11 +103,13 @@ commercial photography quality, [分辨率，如: 4K resolution]
 - [ ] 是否标注技术约束？（NO TEXT, clean design）
 - [ ] 色彩是否来自设计范式？（不是随机颜色）
 
-### Step 6: 创建/更新设计文档
+### Step 6: 创建/更新设计文档（必须执行！）
+
+**⚠️ 必须使用 edit 工具创建以下文件！不要只在对话中说已创建！**
 
 **如果是第1轮，创建以下文件**：
 
-1. **design_paradigm.md**：
+1. **design_paradigm.md**（必须创建）：
 
 ```markdown
 # 设计范式 - 第1轮
@@ -143,7 +145,7 @@ commercial photography quality, [分辨率，如: 4K resolution]
 - ✅ 提示词中标注 NO TEXT
 ```
 
-2. **prompts.md**：
+2. **prompts.md**（必须创建）：
 
 ```markdown
 # 提示词记录 - 第1轮
