@@ -20,18 +20,18 @@ const MODEL = "gemini-2.5-flash-image";
 
 // 风格预设
 const STYLE_PRESETS: Record<string, string> = {
-  // 吉祥物风格 - 科技风
-  mascot_tech: "geometric mascot character, futuristic tech-inspired design, angular shapes, circuit board patterns, glowing accents, holographic effects, clean white background, professional soft studio lighting, NO TEXT NO LETTERS NO CHINESE CHARACTERS, high detail, 4K resolution",
-  // 吉祥物风格 - 可爱风
-  mascot_cute: "cute mascot character, kawaii style, rounded forms, soft edges, friendly appearance, pastel colors, clean pastel background, warm natural lighting, NO TEXT NO LETTERS NO CHINESE CHARACTERS, high detail, 4K resolution",
-  // 吉祥物风格 - 高端风
-  mascot_premium: "premium mascot character, sophisticated design, refined details, luxury feel, editorial quality, minimal dark background, dramatic lighting with rich shadows, NO TEXT NO LETTERS NO CHINESE CHARACTERS, ultra high detail, 8K resolution",
-  // 吉祥物风格 - 扁平风
-  mascot_flat: "flat illustration mascot character, vector art style, bold colors, clean shapes, minimal design, solid color background, no shading, clean outlines, NO TEXT NO LETTERS NO CHINESE CHARACTERS",
-  // 吉祥物风格 - 3D风
-  mascot_3d: "3D rendered mascot character, Pixar-style, volumetric, soft lighting, subsurface scattering, environment background, cinematic composition, NO TEXT NO LETTERS NO CHINESE CHARACTERS, 3D render quality, 4K resolution",
-  // 吉祥物风格 - 通用（保留向后兼容）
-  mascot: "mascot character, clean design, professional quality, NO TEXT NO LETTERS NO CHINESE CHARACTERS",
+  // 吉祥物风格 - 2D卡通科技风（推荐）
+  mascot_tech: "2D cartoon mascot character, flat illustration style, clean vector art, simple geometric shapes, tech-inspired elements like circuit lines or digital patterns, friendly and approachable, vibrant brand colors, clean white or light gradient background, NO TEXT NO LETTERS NO CHINESE CHARACTERS, crisp lines, professional 2D illustration, high quality",
+  // 吉祥物风格 - 2D卡通可爱风
+  mascot_cute: "2D cartoon mascot character, kawaii flat illustration, rounded simple shapes, cute and friendly expression, pastel or vibrant colors, clean minimal background, NO TEXT NO LETTERS NO CHINESE CHARACTERS, smooth vector style, professional 2D illustration",
+  // 吉祥物风格 - 2D卡通高端风
+  mascot_premium: "2D cartoon mascot character, elegant flat illustration, refined simple shapes, sophisticated color palette, minimal clean background, NO TEXT NO LETTERS NO CHINESE CHARACTERS, polished vector style, professional 2D illustration, high quality",
+  // 吉祥物风格 - 2D扁平风
+  mascot_flat: "2D flat mascot character, vector illustration, bold simple shapes, minimal details, solid colors, no gradients, clean background, NO TEXT NO LETTERS NO CHINESE CHARACTERS, icon-style design",
+  // 吉祥物风格 - 2D手绘风
+  mascot_handdrawn: "2D hand-drawn mascot character, illustration style, organic shapes, sketchy friendly feel, warm colors, textured or clean background, NO TEXT NO LETTERS NO CHINESE CHARACTERS, artistic illustration quality",
+  // 吉祥物风格 - 通用2D卡通（保留向后兼容）
+  mascot: "2D cartoon mascot character, flat illustration style, clean design, friendly appearance, NO TEXT NO LETTERS NO CHINESE CHARACTERS, professional 2D illustration",
 
   // 文创产品风格 - 棚拍
   product_studio: "realistic product photography, premium studio setup, white background with subtle gradient, soft box lighting, even illumination, soft shadows on white, depth of field, sharp focus on product, clean edges, commercial photography quality, 4K resolution",
@@ -85,7 +85,7 @@ export default tool({
         "mascot_cute",
         "mascot_premium",
         "mascot_flat",
-        "mascot_3d",
+        "mascot_handdrawn",
         "mascot",
         "product_studio",
         "product_lifestyle",

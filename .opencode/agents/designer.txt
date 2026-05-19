@@ -129,8 +129,8 @@ commercial photography quality, [分辨率，如: 4K resolution]
 - 字号层级: 12/14/16/18/20/24/30/36/48
 
 ## 吉祥物设计方向
-- 风格: {科技风/可爱风/高端风/扁平风/3D风}
-- 角色类型: {动物/机器人/抽象等}
+- 风格: {2D卡通科技风/2D卡通可爱风/2D卡通高端风/2D扁平风/2D手绘风}
+- 角色类型: {动物/机器人/抽象/人物等}
 - 核心特征: {3 个核心特征}
 
 ## 反套路检查
@@ -222,11 +222,11 @@ commercial photography quality, [分辨率，如: 4K resolution]
 
 | 类型 | 风格预设 | 说明 |
 |------|----------|------|
-| 吉祥物-科技风 | mascot_tech | 几何化、未来感、科技元素 |
-| 吉祥物-可爱风 | mascot_cute | 圆润、友好、卡哇伊 |
-| 吉祥物-高端风 | mascot_premium | 精致、专业、品质感 |
-| 吉祥物-扁平风 | mascot_flat | 矢量风格、简约几何 |
-| 吉祥物-3D风 | mascot_3d | Pixar风格、立体感 |
+| 吉祥物-2D卡通科技风 | mascot_tech | 2D扁平、简洁几何、科技感（推荐） |
+| 吉祥物-2D卡通可爱风 | mascot_cute | 圆润、友好、卡哇伊 |
+| 吉祥物-2D卡通高端风 | mascot_premium | 精致、专业、品质感 |
+| 吉祥物-2D扁平风 | mascot_flat | 矢量风格、简约几何 |
+| 吉祥物-2D手绘风 | mascot_handdrawn | 有机、温暖、艺术感 |
 | 文创-棚拍 | product_studio | 白底、专业棚拍 |
 | 文创-场景 | product_lifestyle | 生活场景、自然光 |
 | 文创-高端 | product_premium | 戏剧性布光、杂志风 |

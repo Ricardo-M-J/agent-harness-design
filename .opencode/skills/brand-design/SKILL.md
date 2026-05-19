@@ -106,11 +106,11 @@ description: 品牌设计 Skill：品牌形象设计、吉祥物设计、色彩�
 
 | 风格 | 特点 | 适用场景 | Prompt 关键词 |
 |------|------|----------|---------------|
-| **科技风** | 几何化、简洁、未来感 | 科技品牌、SaaS | geometric, tech elements, circuit patterns, futuristic |
-| **可爱风** | 圆润、友好、卡哇伊 | 儿童品牌、消费品 | rounded forms, kawaii, soft colors, friendly |
-| **高端风** | 精致、专业、品质感 | 高端品牌、企业 | premium feel, refined details, sophisticated |
-| **扁平风** | 矢量、简约、易识别 | 互联网品牌 | flat illustration, vector style, bold colors |
-| **3D风** | 立体、质感、 Pixar风 | 年轻品牌、数字产品 | 3D render, Pixar-style, volumetric, soft lighting |
+| **2D卡通科技风** | 2D扁平、简洁几何、科技感 | 科技品牌、SaaS（推荐） | 2D cartoon, flat illustration, simple geometric, tech elements |
+| **2D卡通可爱风** | 圆润、友好、卡哇伊 | 儿童品牌、消费品 | 2D cartoon, kawaii flat, rounded simple shapes, friendly |
+| **2D卡通高端风** | 精致、专业、品质感 | 高端品牌、企业 | 2D cartoon, elegant flat, refined simple shapes, sophisticated |
+| **2D扁平风** | 矢量、简约、易识别 | 互联网品牌 | 2D flat, vector illustration, bold simple shapes, minimal |
+| **2D手绘风** | 有机、温暖、艺术感 | 文创品牌、艺术产品 | 2D hand-drawn, illustration style, organic shapes, artistic |
 
 ### 2.3 吉祥物设计反套路
 
@@ -138,36 +138,40 @@ primary color [HEX], secondary color [HEX], accent color [HEX],
 clean design, NO TEXT, professional quality, high detail
 ```
 
-**风格变体 Prompt**：
+**风格变体 Prompt**（推荐使用 2D 卡通风格）：
 
-科技风：
+2D卡通科技风（推荐）：
 ```
-A geometric mascot character, futuristic design, 
-tech-inspired shapes, circuit board patterns, glowing accents,
+A 2D cartoon mascot character, flat illustration style,
+clean vector art, simple geometric shapes,
+tech-inspired elements like circuit lines or digital patterns,
 primary color #3B82F6, secondary color #10B981, accent color #F97316,
-confident expression, dynamic pose with tech elements,
-clean white background,
-professional quality, NO TEXT, high detail
+friendly and approachable expression, dynamic pose,
+clean white or light gradient background,
+crisp clean lines, no shading, flat colors,
+NO TEXT, professional 2D illustration, high quality
 ```
 
-可爱风：
+2D卡通可爱风：
 ```
-A cute mascot character, kawaii style, rounded forms,
-soft pastel colors, friendly appearance,
+A 2D cartoon mascot character, kawaii flat illustration,
+rounded simple shapes, cute and friendly expression,
 primary color #8B5CF6, secondary color #F472B6, accent color #FBBF24,
-happy expression, playful pose,
-clean pastel background,
-professional quality, NO TEXT, high detail
+happy smile, playful pose,
+clean minimal background,
+smooth vector style, flat colors, no gradients,
+NO TEXT, professional 2D illustration
 ```
 
-高端风：
+2D卡通高端风：
 ```
-A premium mascot character, sophisticated design, refined details,
-luxury feel, editorial quality,
+A 2D cartoon mascot character, elegant flat illustration,
+refined simple shapes, sophisticated color palette,
 primary color #1E293B, secondary color #64748B, accent color #D4AF37,
-confident expression, elegant pose,
+confident professional expression, elegant pose,
 minimal clean background,
-professional quality, NO TEXT, high detail
+polished vector style, flat colors, clean lines,
+NO TEXT, professional 2D illustration, high quality
 ```
 
 ---

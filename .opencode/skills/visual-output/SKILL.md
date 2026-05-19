@@ -66,69 +66,68 @@ professional quality, NO TEXT, high detail
 
 ### 2.2 风格变体模板
 
-#### 科技风（Tech Style）
+#### 2D卡通科技风（推荐）
 ```
-A [角色类型] mascot character, tech-inspired design,
-geometric shapes, circuit patterns, holographic accents,
+A 2D cartoon [角色类型] mascot character, flat illustration style,
+clean vector art, simple geometric shapes,
+tech-inspired elements like circuit lines or digital patterns,
 primary color [HEX], secondary color [HEX], accent color [HEX],
-[表情: confident/focused/curious],
-[姿态: dynamic pose with tech elements/pointing forward/holding device],
-clean white background,
-[构图: 3/4 view / hero shot],
-soft studio lighting with blue rim light,
-professional quality, NO TEXT, high detail, 4K resolution
+[表情: confident/friendly/curious with simple features],
+[姿态: dynamic pose / pointing / holding device],
+clean white or light gradient background,
+[构图: centered / simple composition],
+crisp clean lines, no shading, flat colors,
+NO TEXT, professional 2D illustration, high quality
 ```
 
-#### 可爱风（Cute Style）
+#### 2D卡通可爱风
 ```
-A cute [角色类型] mascot character, kawaii style,
-rounded forms, soft edges, friendly appearance,
+A 2D cartoon [角色类型] mascot character, kawaii flat illustration,
+rounded simple shapes, cute and friendly expression,
 primary color [HEX], secondary color [HEX], accent color [HEX],
-[表情: happy smile/bright eyes/warm gaze],
-[姿态: playful pose/bouncy stance/waving hand],
-clean pastel gradient background,
-[构图: close-up / full body centered],
-warm natural lighting, soft shadows,
-professional quality, NO TEXT, high detail, 4K resolution
+[表情: happy smile/simple bright eyes],
+[姿态: playful pose / waving / bouncy stance],
+clean minimal background,
+[构图: centered / full body],
+smooth vector style, flat colors, no gradients,
+NO TEXT, professional 2D illustration
 ```
 
-#### 高端风（Premium Style）
+#### 2D卡通高端风
 ```
-A premium [角色类型] mascot character, sophisticated design,
-refined details, luxury feel, editorial quality,
+A 2D cartoon [角色类型] mascot character, elegant flat illustration,
+refined simple shapes, sophisticated color palette,
 primary color [HEX], secondary color [HEX], accent color [HEX],
-[表情: confident smirk/stoic expression/noble bearing],
-[姿态: elegant pose/standing tall/confident stance],
-minimal dark background,
-[构图: portrait / asymmetric],
-dramatic lighting, rich shadows, rim light,
-professional quality, NO TEXT, ultra high detail, 8K resolution
+[表情: confident / elegant / professional],
+[姿态: standing tall / confident stance],
+minimal clean background,
+[构图: centered / simple],
+polished vector style, flat colors, clean lines,
+NO TEXT, professional 2D illustration, high quality
 ```
 
-#### 扁平风（Flat Style）
+#### 2D扁平风
 ```
-A flat illustration [角色类型] mascot character,
-vector art style, bold colors, clean shapes,
+A 2D flat [角色类型] mascot character, vector illustration,
+bold simple shapes, minimal details,
 primary color [HEX], secondary color [HEX], accent color [HEX],
-[表情: simple geometric expression],
+[表情: simple friendly expression],
 [姿态: iconic pose with clear silhouette],
-solid color background,
-[构图: full body / iconic hero shot],
+solid color background, no gradients,
 no shading, clean outlines,
-professional quality, NO TEXT, vector-style
+NO TEXT, icon-style design
 ```
 
-#### 3D风（3D Style）
+#### 2D手绘风
 ```
-A 3D rendered [角色类型] mascot character,
-Pixar-style, volumetric, soft lighting,
+A 2D hand-drawn [角色类型] mascot character, illustration style,
+organic shapes, sketchy friendly feel,
 primary color [HEX], secondary color [HEX], accent color [HEX],
-[表情: expressive/friendly/detailed face],
-[姿态: dynamic action pose/full body],
-environment background or studio setting,
-[构图: 3/4 view / cinematic],
- subsurface scattering, soft shadows, depth of field,
-professional quality, NO TEXT, 3D render, 4K resolution
+[表情: warm / friendly / approachable],
+[姿态: casual pose / natural stance],
+textured or clean background,
+artistic illustration quality, warm colors,
+NO TEXT, artistic 2D illustration
 ```
 
 ### 2.3 吉祥物 Prompt 参考词汇
