@@ -7,15 +7,16 @@
 **核心原则**：
 - 实用优先：能跑通、能生成高质量视觉资产
 - 灵活可调：Agent prompt、Skill、工具、模型、存储都可调整
-- 不追求通用框架：专注赛题17的品牌设计场景
+- Skill 驱动：Agent 根据任务类型自动加载对应的 Skill，实现可扩展性
+- 不追求通用框架：专注品牌设计场景
 
 ---
 
 ## 目标架构 vs 当前架构
 
-### 目标架构（理想设计流程）
+### 目标架构（已实现）
 
-**设计思路**：三个 Agent 形成完整的设计流水线，每个环节有明确的输入输出和迭代反馈机制
+**设计思路**：三个 Agent 形成完整的设计流水线，每个环节有明确的输入输出和迭代反馈机制。Designer 根据任务类型自动加载 Skill。
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
@@ -29,14 +30,8 @@
 │  │ @planner（调研规划）                                              │   │
 │  │                                                                  │   │
 │  │ 输入：用户需求                                                    │   │
-│  │ 动作：                                                            │   │
-│  │   1. 调研创智学院风格、理念、视觉特征                              │   │
-│  │   2. 分析品牌定位与创智的差异化方向                                │   │
-│  │   3. 输出具体设计任务清单                                         │   │
-│  │                                                                  │   │
-│  │ 输出：task_list.md + style_reference.md                          │   │
+│  │ 输出：task_list.md                                               │   │
 │  │   - 品牌理念定位                                                  │   │
-│  │   - 参考创智风格但做差异化                                        │   │
 │  │   - 具体要生成哪些图（吉祥物/Logo/文创）                          │   │
 │  │   - 每张图的用途和风格方向                                        │   │
 │  └────────────────────────────┬─────────────────────────────────────┘   │
@@ -44,14 +39,17 @@
 │  ┌─────────────────────────────────────────────────────────────────┐   │
 │  │ @designer（范式分析 + 执行）                                      │   │
 │  │                                                                  │   │
-│  │ 输入：task_list.md + style_reference.md                          │   │
-│  │ 动作：                                                            │   │
-│  │   1. 【范式分析】根据品牌理念分析设计范式                          │   │
-│  │      - 色彩系统（主色/辅色/点缀色 + 色值）                         │   │
-│  │      - 字体选择（风格/用途）                                      │   │
-│  │      - 风格关键词（科技感/年轻化等）                              │   │
-│  │   2. 【提示词工程】为每张图编写精准提示词                          │   │
-│  │   3. 【图像生成】调用 text-to-image Tool 生图                    │   │
+│  │ Step 1: 读取 task_list.md                                        │   │
+│  │ Step 2: 【关键】根据任务类型加载 Skill                            │   │
+│  │   - 品牌设计 → brand-design/SKILL.md                             │   │
+│  │   - 视觉输出 → visual-output/SKILL.md                            │   │
+│  │   - 文案需求 → copywriting/SKILL.md                              │   │
+│  │   - 设计规范 → design-spec/SKILL.md                              │   │
+│  │ Step 3: 使用 Skill 模板生成设计文档                               │   │
+│  │   - 色彩系统（oklch + HEX）                                       │   │
+│  │   - 字体选择（非 Inter/Roboto）                                   │   │
+│  │   - 反套路检查清单                                                │   │
+│  │ Step 4: 调用 text-to-image Tool 生图                            │   │
 │  │                                                                  │   │
 │  │ 输出：design_paradigm.md + prompts.md + *.png                    │   │
 │  └────────────────────────────┬─────────────────────────────────────┘   │
@@ -61,20 +59,19 @@
 │  │                                                                  │   │
 │  │ 输入：范式 + 提示词 + 生成的图片                                  │   │
 │  │ 动作：                                                            │   │
-│  │   1. 评价每张图（1-5分）                                          │   │
-│  │   2. 诊断问题类型：                                               │   │
-│  │      - 范式问题（色彩不对/风格不符）→ 修改 design_paradigm.md   │   │
-│  │      - 提示词问题（描述不准/细节缺失）→ 修改 prompts.md         │   │
-│  │   3. 输出结构化改进建议（可直接执行）                             │   │
+│  │   1. 使用 bash 读取图片（base64）                                 │   │
+│  │   2. 三维度评分（品牌契合度40%/视觉冲击力30%/执行质量30%）        │   │
+│  │   3. 诊断问题类型：                                               │   │
+│  │      - 品牌契合度 < 4/5 → 修改 design_paradigm.md               │   │
+│  │      - 视觉/执行 < 4/5 → 修改 prompts.md                        │   │
+│  │   4. 输出结构化改进建议（可直接执行）                             │   │
 │  │                                                                  │   │
-│  │ 输出：review_roundN.md                                           │   │
-│  │   - 评分 + 问题诊断 + 具体修改建议                                │   │
-│  │   - 完整的新范式 / 新提示词（Designer 可直接复制）                │   │
+│  │ 输出：review_roundN.md（使用 edit 工具写入文件）                 │   │
 │  └────────────────────────────┬─────────────────────────────────────┘   │
 │                               │                                         │
 │              ┌────────────────┴────────────────┐                       │
 │              ▼                                 ▼                       │
-│        【未收敛】平均分 < 4/5          【收敛】平均分 ≥ 4/5              │
+│        【未收敛】总分 < 4.0          【收敛】总分 ≥ 4.0                  │
 │              │                                 │                       │
 │              ▼                                 ▼                       │
 │        回到 @designer                  输出最终结果                     │
@@ -84,13 +81,15 @@
 └─────────────────────────────────────────────────────────────────────────┘
 
 关键设计：
-- 流水线式分工：调研 → 范式+执行 → 评审+反馈
+- Skill 驱动：Designer 根据任务自动加载对应 Skill，实现可扩展
 - 双向迭代：Critic 的反馈可以作用于范式层或执行层
 - 结构化输出：每个环节的输出是下一环节的输入
 - 可执行的改进建议：Critic 给出的是可直接替换的范式/提示词
 ```
 
-### 当前架构（OpenCode 实现）
+---
+
+## 当前架构（OpenCode 实现）
 
 **设计思路**：基于 OpenCode 的 Primary-Subagent 模式，通过 AGENTS.md 强制编排
 
@@ -112,7 +111,7 @@
 │  ┌────────┐  ┌────────┐  ┌────────┐                      │
 │  │@planner│  │@designer│  │@critic │                      │
 │  │(sub)   │  │(sub)   │  │(sub)   │                      │
-│  │        │  │【已实现】│  │【已实现】│                      │
+│  │        │  │【Skill驱动】│  │【已实现】│                      │
 │  │调研规划 │  │范式分析 │  │看图评审 │                      │
 │  │        │  │提示词   │  │结构化反馈│                      │
 │  │        │  │生图     │  │        │                      │
@@ -120,90 +119,104 @@
 │                                                            │
 │  配置：opencode.json — 模型、Agent定义、权限控制           │
 └────────────────────────────────────────────────────────────┘
-
-当前实现与目标的差距：
-✅ Planner：已实现调研规划功能
-✅ Designer：已实现范式分析 + 提示词 + 生图
-✅ Critic：已实现看图评审 + 结构化反馈
-⚠️ 迭代机制：已实现，但 Critic 反馈格式有时不够结构化
-⚠️ 上下文传递：Subagent 看不到完整历史，依赖 Primary 传递
 ```
 
 ### 架构对比
 
-| 维度 | 目标架构（理想流程） | 当前架构（OpenCode 实现） |
-|------|---------------------|-------------------------|
+| 维度 | 目标架构 | 当前架构 |
+|------|---------|---------|
 | **Agent 关系** | 流水线式协作，环节清晰 | Primary 编排，层级调用 |
 | **Planner** | 调研风格 + 输出任务清单 | ✅ 已实现 |
-| **Designer** | 范式分析 → 提示词 → 生图 | ✅ 已实现 |
-| **Critic** | 看图评价 + 结构化反馈（改范式/改提示词） | ✅ 基本实现，格式待优化 |
-| **迭代机制** | Critic → Designer 双向反馈 | ✅ 已实现，通过文件传递 |
-| **上下文** | 共享文件系统，环节透明 | Subagent 隔离，Primary 中转 |
-| **OpenCode 支持** | 需要 Agent Team 模式 | ✅ 正式版支持 |
-| **当前状态** | 概念设计 | ✅ 已跑通，待优化 |
+| **Designer** | Skill 驱动，可扩展 | ✅ 已实现 |
+| **Critic** | 三维评分 + 结构化反馈 | ✅ 已实现 |
+| **迭代机制** | Critic → Designer 双向反馈 | ✅ 已实现 |
+| **Skill 系统** | Designer 自动加载 Skill | ✅ 已实现 |
+| **当前状态** | 概念设计 | ✅ 已跑通 |
 
 ---
 
-## 当前架构详解
+## Skill 系统详解
 
-### 编排层
+### Skill 设计哲学
 
-```
-┌──────────────────────────────────────────────────────────┐
-│  OpenCode 编排层                                          │
-│                                                          │
-│  opencode.json — 模型配置、Agent 定义、权限控制            │
-│  AGENTS.md — Primary Agent 编排逻辑（步骤式调用）          │
-│                                                          │
-│  ┌──────────┐   ┌───────────┐   ┌──────────┐           │
-│  │ @planner │──▶│ @designer │──▶│ @critic  │──┐        │
-│  │  规划    │   │   设计    │   │  评审    │  │        │
-│  └──────────┘   └─────┬─────┘   └──────────┘  │        │
-│                       │                       │        │
-│  └────────────────────┼───────────────────────┘        │
-│                       │                                 │
-│  ┌────────────────────┼──────────────────────────────┐ │
-│  │  Skill 层（设计知识库）                              │ │
-│  │                                                    │ │
-│  │  brand-design/SKILL.md    — 品牌设计方法论         │ │
-│  │  visual-output/SKILL.md   — 视觉资产生成指南       │ │
-│  │  design-spec/SKILL.md     — 设计规范与 Token       │ │
-│  │  copywriting/SKILL.md     — 文案写作指南           │ │
-│  │  design-review/SKILL.md   — 评审标准与检查清单     │ │
-│  │                                                    │ │
-│  └────────────────────────────────────────────────────┘ │
-│                                                          │
-│  ┌────────────────────────────────────────────────────┐ │
-│  │  Custom Tools                                       │ │
-│  │  text-to-image.ts — 图像生成（Gemini/gpt-image-2）  │ │
-│  └────────────────────────────────────────────────────┘ │
-└──────────────────────────────────────────────────────────┘
-```
-
-### 多智能体协作流程
+**核心思想**：将设计知识编码为可复用的 Skill 文档，Designer 根据任务类型自动加载。
 
 ```
-用户输入 → @planner → @designer → @critic → 收敛判断
-              ↓           ↓           ↓
-         task_list.md  design_paradigm.md  review_roundN.md
-         style_ref.md  prompts.md
-                       *.png
+┌─────────────────────────────────────────────────────────────┐
+│                     Skill 驱动架构                           │
+│                                                             │
+│  用户输入                                                    │
+│     │                                                       │
+│     ▼                                                       │
+│  @planner ──→ task_list.md（包含任务类型）                   │
+│     │                                                       │
+│     ▼                                                       │
+│  @designer ──→ 读取 task_list.md                            │
+│     │                                                       │
+│     ├── 任务包含"品牌设计" → 加载 brand-design/SKILL.md      │
+│     ├── 任务包含"文创" → 加载 visual-output/SKILL.md        │
+│     ├── 任务包含"文案" → 加载 copywriting/SKILL.md          │
+│     └── 任务包含"规范" → 加载 design-spec/SKILL.md          │
+│     │                                                       │
+│     ▼                                                       │
+│  使用 Skill 模板生成设计文档                                  │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-### 迭代闭环
+### 已定义的 Skills
+
+| Skill | 路径 | 用途 | 关键内容 |
+|-------|------|------|----------|
+| **brand-design** | `.opencode/skills/brand-design/SKILL.md` | 品牌形象设计 | 反套路清单、oklch色彩系统、6组色彩x字体配对 |
+| **visual-output** | `.opencode/skills/visual-output/SKILL.md` | 视觉资产生成 | Logo/吉祥物/文创/品牌页面生成指南 |
+| **design-spec** | `.opencode/skills/design-spec/SKILL.md` | 设计规范文档 | Design Token系统（色彩/字体/间距/圆角/阴影/动效） |
+| **copywriting** | `.opencode/skills/copywriting/SKILL.md` | 品牌文案 | 标语体系、品牌故事、宣言模板 |
+| **design-review** | `.opencode/skills/design-review/SKILL.md` | 设计评审 | 五维评分框架（已废弃，Critic使用简化版） |
+
+### Skill 调用机制
+
+**Designer 的工作流**：
 
 ```
-┌─────────────────────────────────────────┐
-│  第1轮: @designer 生成初版               │
-│       ↓                                 │
-│       @critic 评审 (review_round1.md)   │
-│       ↓                                 │
-│       平均分 < 4/5 ? ──→ 是 ──→ 迭代    │
-│       ↓ no                              │
-│       结束                              │
-└─────────────────────────────────────────┘
+Step 1: 读取 task_list.md
+Step 2: 【关键】根据任务类型加载 Skill
+        - 使用 read 工具读取对应的 SKILL.md 文件
+        - 解析 Skill 中的模板和方法论
+Step 3: 使用 Skill 模板生成 design_paradigm.md
+        - 品牌基础（名称/定位/个性/受众）
+        - 色彩系统（oklch + HEX）
+        - 字体选择（非 Inter/Roboto）
+        - 反套路检查清单
+Step 4: 使用 Skill 模板生成 prompts.md
+Step 5: 调用 text-to-image Tool 生图
+```
 
-迭代: @designer 读取 review_roundN.md → 修改 → 重新生成 → @critic 再评
+### 扩展新 Skill
+
+要添加新的设计能力，只需：
+
+1. 创建 `.opencode/skills/{skill-name}/SKILL.md`
+2. 在 `designer.txt` 中添加 Skill 映射规则
+3. 在 `task_list.md` 中使用对应的关键词触发
+
+示例：添加"动画设计" Skill
+
+```markdown
+# .opencode/skills/animation-design/SKILL.md
+
+---
+name: animation-design
+description: 品牌动画设计：动效规范、转场效果、微交互
+---
+
+## 动画原则
+...
+```
+
+在 `designer.txt` 中添加：
+```markdown
+- 任务包含"动画"、"动效"、"micro-interaction" → 读取 `.opencode/skills/animation-design/SKILL.md`
 ```
 
 ---
@@ -244,9 +257,15 @@
 
 ### 1. 吉祥物 (mascot)
 - 用途: 品牌IP形象
-- 风格: 可爱科技风吉祥物
+- 风格预设: mascot
 - 色彩: 主色#00B4D8 + 辅色#0077B6 + 点缀#F77F00
 - 保存路径: outputs/上海创智/mascot.png
+
+### 2. 文创帆布袋 (tote_bag)
+- 用途: 品牌周边
+- 风格预设: tote_bag
+- 色彩: 与吉祥物配色一致
+- 保存路径: outputs/上海创智/tote_bag.png
 ```
 
 ---
@@ -257,23 +276,32 @@
 
 **输入**: task_list.md + style_reference.md
 
+**关键改进：Skill 驱动**
+
 **动作**:
-1. **范式分析**: 根据品牌理念分析设计范式
-   - 色彩系统（主色/辅色/点缀色 + 精确色值）
-   - 字体选择（风格/用途）
-   - 风格关键词（科技感/年轻化等）
-2. **提示词工程**: 为每张图编写精准提示词
-3. **图像生成**: 调用 text-to-image Tool 生图
+1. **读取任务清单**，分析设计需求
+2. **【关键】根据任务类型加载 Skill**：
+   - 品牌设计 → `brand-design/SKILL.md`
+   - 视觉输出 → `visual-output/SKILL.md`
+   - 文案需求 → `copywriting/SKILL.md`
+   - 设计规范 → `design-spec/SKILL.md`
+3. **使用 Skill 模板生成设计范式**：
+   - 品牌基础（名称/定位/个性/受众）
+   - 色彩系统（oklch + HEX，非 Tailwind 默认蓝）
+   - 字体选择（Outfit/思源黑体，非 Inter/Roboto）
+   - 反套路检查清单
+4. **使用 Skill 模板生成提示词**
+5. **调用 text-to-image Tool 生图**
 
 **输出**:
-- `outputs/{项目}/design_paradigm.md` — 设计范式
+- `outputs/{项目}/design_paradigm.md` — 设计范式（使用 Skill 模板）
 - `outputs/{项目}/prompts.md` — 提示词记录
 - `outputs/{项目}/*.png` — 生成的图片
 
 **迭代时**:
 - 读取 Critic 的 review_roundN.md
-- 如果是"范式问题" → 修改 design_paradigm.md
-- 如果是"提示词问题" → 修改 prompts.md
+- 品牌契合度 < 4/5 → 修改 design_paradigm.md（参考 Skill 模板）
+- 视觉/执行 < 4/5 → 修改 prompts.md
 - 只重新生成需要修改的图片
 
 ---
@@ -284,111 +312,97 @@
 
 **输入**: design_paradigm.md + prompts.md + *.png
 
+**关键改进**：
+- 使用 bash 读取图片（base64）
+- 简化为三维度评分
+- 必须使用 edit 工具写入文件
+
 **动作**:
-1. **评价每张图**（1-5分）
-2. **诊断问题类型**:
-   - 范式问题（色彩不对/风格不符）→ 建议修改 design_paradigm.md
-   - 提示词问题（描述不准/细节缺失）→ 建议修改 prompts.md
-3. **输出结构化改进建议**（可直接执行）
+1. **使用 bash 读取图片**：`base64 -w 0 outputs/{项目}/*.png`
+2. **三维度评分**：
+   - 品牌契合度（40%权重）
+   - 视觉冲击力（30%权重）
+   - 执行质量（30%权重）
+3. **诊断问题类型**：
+   - 品牌契合度 < 4/5 → 建议修改 design_paradigm.md
+   - 视觉/执行 < 4/5 → 建议修改 prompts.md
+4. **使用 edit 工具写入 review_roundN.md**
 
 **输出**: `outputs/{项目}/review_roundN.md`
 
 **要求格式**:
 ```markdown
-# 评审报告 - 第N轮
+# 评审报告 - 第{N}轮
 
 ## 总体评分
-- 平均分: X/5
+- 加权总分: X.X/5
+- 是否需要迭代: 是 / 否
+- 判定理由: [具体说明]
+
+## 三维度评分
+
+| 维度 | 权重 | 评分 | 判断依据 |
+|------|------|------|----------|
+| 品牌契合度 | 40% | X/5 | [对照 task_list.md 和 design_paradigm.md 的具体说明] |
+| 视觉冲击力 | 30% | X/5 | [第一眼的直观感受] |
+| 执行质量 | 30% | X/5 | [色彩、构图、细节的具体问题] |
 
 ## 需要修改的图片
 
 ### 图片1: mascot.png
-- 评分: 3/5
-- 问题类型: 范式问题（色彩偏差）
-- 当前范式: 主色 #00B4D8
-- 建议修改为: 主色 #0077B6（更深沉，更专业）
-- 原因: 当前蓝色太亮，不够沉稳
+- 评分: X/5
+- 问题类型: 品牌契合度 / 视觉冲击力 / 执行质量
+- 具体问题: [详细描述]
+- 当前提示词: "..."
+- 建议修改提示词为: "..."（完整的新提示词，Designer 可直接复制）
+- 原因: [具体说明]
 
-### 图片2: logo.png
-- 评分: 2/5
-- 问题类型: 提示词问题
-- 当前提示词: "cute robot owl..."
-- 建议修改提示词为: "professional tech owl, sharp edges, metallic texture..."
-- 原因: 太可爱，不够专业
+## 迭代建议
 
-## 保留不变的图片
-无
+### 必须修复
+- [具体问题1，关联到某个维度]
+- [具体问题2，关联到某个维度]
+
+### 建议优化
+- [可选改进]
+
+## 评审结论
+
+- 最终总分: XX/100
+- 判定: 🔄 需迭代 / ✅ 通过
 ```
 
 ---
 
-## 收敛条件
+## 迭代闭环
 
-满足任一即结束：
+```
+┌─────────────────────────────────────────┐
+│  第1轮: @designer 生成初版               │
+│       ↓                                 │
+│       @critic 评审 (review_round1.md)   │
+│       ↓                                 │
+│       总分 < 4.0 ? ──→ 是 ──→ 迭代      │
+│       ↓ no                              │
+│       结束                              │
+└─────────────────────────────────────────┘
 
-1. **平均分 ≥ 4/5**（80% 以上）
-2. **轮次 ≥ 3**（成本控制）
-
-否则回到 Designer 迭代。
+迭代: @designer 读取 review_roundN.md → 修改 → 重新生成 → @critic 再评
+```
 
 ---
 
-## 图像生成方案
+## Custom Tools
 
-### 模型选择
+### text-to-image.ts
 
-| 模型 | 时延 | 稳定性 | 备注 |
-|------|------|--------|------|
-| **gemini-2.5-flash-image** | ~10秒 | ✅ 高 | 推荐，走 chat/completions |
-| gpt-image-2 | ~4-5分钟 | ❌ 低 | 经常 timeout |
+**功能**: 使用 Gemini API 生成设计图像
 
-### 技术实现
+**支持的风格预设**:
+- 基础设计: logo, poster, banner, card, social, icon, brand_image, illustration, mascot, product
+- 文创产品: tote_bag, mug, notebook, sticker, t_shirt
 
-**Gemini**（推荐）:
-- API: `/v1/chat/completions`
-- 请求: `{ model, messages: [{role, content}] }`
-- 响应: 图片内联在 `choices[0].message.content`（base64）
-
-**gpt-image-2**（备用）:
-- API: `/v1/images/generations`
-- 请求: `{ model, prompt, n, size }`
-- 响应: `data[0].b64_json`
-
-### Custom Tool
-
-`text-to-image.ts` — OpenCode Custom Tool，封装上述两种 API 调用。
-
----
-
-## 权限配置
-
-### Primary Agent (build)
-
-```json
-{
-  "steps": 20,
-  "permission": {
-    "text-to-image": "deny",
-    "bash": { "*": "deny" },
-    "edit": { "*": "deny" }
-  }
-}
-```
-
-Primary 只负责编排，不直接执行设计工作。
-
-### Subagents (planner/designer/critic)
-
-```json
-{
-  "permission": {
-    "edit": { "*": "allow" },
-    "bash": { "*": "allow" }
-  }
-}
-```
-
-Subagents 可以自主读写文件、执行命令。
+**当前模型**: gemini-2.5-flash-image（gemini-3-pro-image-preview 暂时不可用）
 
 ---
 
@@ -396,90 +410,47 @@ Subagents 可以自主读写文件、执行命令。
 
 ```
 agent-harness-design/
-├── opencode.json              # 主配置（模型、Agent、权限）
-├── AGENTS.md                  # Primary Agent 编排逻辑
-├── DEVLOG.md                  # 开发日志
-├── README.md                  # 项目说明
-├── WORKFLOW.md                # 工作流与调试记录
-├── test-image-latency.ts      # 时延测试脚本
-│
 ├── .opencode/
 │   ├── agents/
-│   │   ├── planner.txt        # Planner prompt
-│   │   ├── designer.txt       # Designer prompt
-│   │   └── critic.txt         # Critic prompt
-│   │
-│   ├── skills/
-│   │   ├── brand-design/SKILL.md
-│   │   ├── visual-output/SKILL.md
-│   │   ├── design-spec/SKILL.md
-│   │   ├── copywriting/SKILL.md
-│   │   └── design-review/SKILL.md
-│   │
+│   │   ├── planner.txt      # Planner Agent 提示词
+│   │   ├── designer.txt     # Designer Agent 提示词（Skill 驱动）
+│   │   └── critic.txt       # Critic Agent 提示词
+│   ├── skills/              # 【核心】Skill 系统
+│   │   ├── brand-design/
+│   │   │   └── SKILL.md     # 品牌设计方法论
+│   │   ├── visual-output/
+│   │   │   └── SKILL.md     # 视觉资产生成指南
+│   │   ├── design-spec/
+│   │   │   └── SKILL.md     # 设计规范与 Token
+│   │   ├── copywriting/
+│   │   │   └── SKILL.md     # 文案写作指南
+│   │   └── design-review/
+│   │       └── SKILL.md     # 评审标准（已废弃）
 │   └── tools/
-│       ├── text-to-image.ts       # 图像生成 Tool
-│       └── text-to-image-simple.ts # 独立 CLI 备用
-│
-└── outputs/
+│       └── text-to-image.ts # 图像生成工具
+├── AGENTS.md                # Primary Agent 编排逻辑
+├── ARCHITECTURE.md          # 本文件
+├── opencode.json            # OpenCode 配置
+└── outputs/                 # 输出目录
     └── {项目名}/
         ├── task_list.md
-        ├── style_reference.md
         ├── design_paradigm.md
         ├── prompts.md
-        ├── mascot.png
-        ├── logo.png
         ├── review_round1.md
-        └── review_round2.md
+        ├── review_round2.md
+        └── *.png
 ```
 
 ---
 
-## 交付物
+## 关键改进总结
 
-```
-outputs/{项目名}/
-├── task_list.md              # 设计任务清单（Planner 输出）
-├── style_reference.md        # 风格参考（复用）
-├── design_paradigm.md        # 设计范式（Designer 输出）
-├── prompts.md                # 提示词记录（Designer 输出）
-├── mascot.png                # 吉祥物
-├── logo.png                  # Logo
-├── merch_*.png               # 文创周边
-├── review_round1.md          # 第1轮评审（Critic 输出）
-└── review_round2.md          # 第2轮评审（如迭代）
-```
-
----
-
-## 历史变更
-
-### v0.4.0 架构调整
-
-**之前**: 4 个 Agent（planner/designer/visual-designer/critic）
-**现在**: 3 个 Agent（planner/designer/critic）
-
-Visual Designer 合并到 Designer + visual-output Skill，简化架构。
-
-### v0.5.0 编排修复
-
-- 增加 `build.steps: 20` 确保 Primary 能完成多步编排
-- 增加 permission 控制，Primary 不能直接调 Tool
-- 重写 AGENTS.md 为强制步骤式
-
-### v0.6.0 图像模型切换
-
-- 从 gpt-image-2 切换到 gemini-2.5-flash-image
-- 时延从 4-5 分钟降到 ~10 秒
-- 解决 OpenCode Tool timeout 问题
-
----
-
-## 与基线方案的对比
-
-| 维度 | 基线方案 | 本系统 |
-|------|---------|--------|
-| Agent 数量 | 3 个 | 3 个 |
-| 图像生成 | Mock/无 | Gemini API（~10秒） |
-| 迭代闭环 | 简单评分 | 结构化评审 + 强制迭代 |
-| 设计知识 | 内嵌 prompt | SKILL.md 可独立维护 |
-| 风格参考 | 无 | 创智风格模板 |
+| 改进项 | 之前 | 现在 |
+|--------|------|------|
+| **Skill 调用** | Skill 是死文档，Agent 能力硬编码 | Designer 根据任务类型自动加载 Skill |
+| **设计范式** | 简单色彩系统 | 使用 brand-design SKILL 的完整模板（oklch + 品牌基础） |
+| **Critic 评分** | 五维评分 + AI套路检测 | 三维评分（品牌契合度/视觉冲击力/执行质量） |
+| **Critic 读图** | 无法读取图片 | 使用 bash + base64 读取图片 |
+| **文件保存** | 有时不保存文件 | 明确使用 edit 工具写入文件 |
+| **字体选择** | 无明确要求 | 使用 Outfit/思源黑体（非 Inter/Roboto） |
+| **色彩系统** | HEX 为主 | oklch + HEX 双系统 |
