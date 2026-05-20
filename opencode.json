@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "moonshot/kimi-k2.5",
+  "model": "boyuerich/gpt-4o",
   "small_model": "boyuerich/gpt-4o-mini",
   "plugin": ["./.opencode/plugins/image-vision.ts"],
   "provider": {

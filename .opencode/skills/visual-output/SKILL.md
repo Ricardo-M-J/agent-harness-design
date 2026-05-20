@@ -9,6 +9,36 @@ description: 视觉输出 Skill：吉祥物、文创产品图像生成的分层 
 
 ---
 
+## ⚠️ 品牌核心规则（必须遵守）
+
+> 所有设计必须以 **{BRAND_NAME}** 为品牌核心！
+
+### 品牌色彩（必须使用）
+
+| 角色 | HEX | 用途 |
+|------|-----|------|
+| **主色** | {PRIMARY_COLOR} | Logo、{BRAND_NAME}文字、核心图形 |
+| **辅色** | {SECONDARY_COLOR} | 辅助图形、渐变 |
+| **点缀色** | {ACCENT_COLOR} | 强调元素 |
+
+### 文字标志规则
+
+**品牌名称（如有）必须作为 Logo 的第一视觉焦点！**
+
+- ✅ 正确：`A logo featuring "{BRAND_NAME}" letters as primary visual element`
+- ❌ 错误：只有图形没有品牌文字
+
+### Prompt 必须包含
+
+```
+✓ 品牌名称（如有）
+✓ 品牌色
+✓ 专业光线/材质/环境描述
+✓ 质量参数
+```
+
+---
+
 ## 1. 分层 Prompt 构建框架
 
 ### 1.1 Prompt 层次结构
@@ -64,18 +94,20 @@ primary color [HEX], secondary color [HEX], accent color [HEX],
 professional quality, NO TEXT, high detail
 ```
 
-### 2.2 风格变体模板
+### 2.2 风格变体模板（{BRAND_NAME} 品牌配色）
+
+> ⚠️ 必须使用品牌色：主色 {PRIMARY_COLOR}，辅色 {SECONDARY_COLOR}，点缀色 {ACCENT_COLOR}
 
 #### 2D卡通科技风（推荐）
+
 ```
-A 2D cartoon [角色类型] mascot character, flat illustration style,
+A 2D cartoon mascot character representing AI innovation, flat illustration style,
 clean vector art, simple geometric shapes,
-tech-inspired elements like circuit lines or digital patterns,
-primary color [HEX], secondary color [HEX], accent color [HEX],
-[表情: confident/friendly/curious with simple features],
-[姿态: dynamic pose / pointing / holding device],
+tech-inspired elements like circuit lines, data streams, or chip patterns,
+{PRIMARY_COLOR} as dominant color, {SECONDARY_COLOR} as secondary, {ACCENT_COLOR} as accent,
+friendly and approachable expression with simple features,
+dynamic pose suggesting innovation and growth,
 clean white or light gradient background,
-[构图: centered / simple composition],
 crisp clean lines, no shading, flat colors,
 NO TEXT, professional 2D illustration, high quality
 ```
@@ -148,6 +180,133 @@ NO TEXT, artistic 2D illustration
 - 站立：standing tall, heroic stance, casual pose
 - 动态：running, jumping, flying, pointing
 - 手部：holding object, waving, thumbs up, gesturing
+
+---
+
+## 3. Logo 设计模板（通用）
+
+> ⚠️ 品牌名称必须作为第一视觉焦点！
+
+### 3.1 科技感 Logo
+
+```
+A minimalist brand logo featuring "{BRAND_NAME}" letters as the primary visual element,
+futuristic tech-inspired design, clean geometric shapes,
+{PRIMARY_COLOR} as dominant, {SECONDARY_COLOR} as secondary, {ACCENT_COLOR} as accent,
+subtle circuit board patterns or data stream elements integrated into letters,
+white or dark background,
+professional logo design, vector quality, NO TEXT except {BRAND_NAME},
+crisp typography, modern corporate identity style,
+ultra high detail, 4K resolution
+```
+
+### 3.2 活力 Logo
+
+```
+A modern brand logo with "{BRAND_NAME}" letters prominently displayed,
+bold typography, dynamic angular shapes suggesting innovation and growth,
+{PRIMARY_COLOR}, {SECONDARY_COLOR}, {ACCENT_COLOR},
+clean minimalist style, suitable for both light and dark backgrounds,
+professional corporate identity design, NO TEXT except {BRAND_NAME},
+vibrant yet professional, youthful energy,
+ultra high detail, 4K resolution
+```
+
+### 3.3 图形融合 Logo
+
+```
+A creative brand logo combining "{BRAND_NAME}" letters with abstract geometric shapes,
+tech-inspired elements: circuit paths, neural networks, data streams,
+{PRIMARY_COLOR} as dominant, {SECONDARY_COLOR} as secondary, {ACCENT_COLOR} as accent,
+white or dark background,
+professional logo design, NO TEXT except {BRAND_NAME},
+premium feel, versatile application,
+ultra high detail, 4K resolution
+```
+
+---
+
+## 4. 文创产品模板（高质量）
+
+> ⚠️ 必须包含品牌标识！参考专业摄影的光线/材质/环境描述。
+
+### 4.1 文创帆布袋（生活场景）
+
+```
+Professional lifestyle product photography of a premium canvas tote bag,
+featuring "{BRAND_NAME}" brand logo printed on front,
+clean modern design with subtle tech-inspired patterns,
+placed on a modern minimalist desk, next to laptop and coffee,
+natural soft daylight from window, gentle warm tones,
+shallow depth of field with soft bokeh background,
+realistic canvas fabric texture with visible weave,
+premium matte finish, professional commercial photography,
+clean minimal composition, 4K resolution
+```
+
+### 4.2 文创马克杯（棚拍）
+
+```
+Professional studio product photography of a ceramic mug,
+featuring "{BRAND_NAME}" brand logo printed around,
+clean minimalist design with subtle geometric patterns,
+white seamless background,
+professional soft box lighting with subtle rim light,
+realistic glossy ceramic material with subtle reflections,
+soft shadow on white base for grounding,
+depth of field, product in sharp focus,
+clean commercial product shot, high detail, 4K resolution
+```
+
+### 4.3 文创笔记本（场景）
+
+```
+Professional product photography of a hardcover notebook,
+featuring "{BRAND_NAME}" brand logo embossed on cover,
+placed on a wooden desk with plants and coffee nearby,
+warm natural lighting, soft shadows,
+slight overhead angle, shallow depth of field,
+realistic paper grain and premium cover texture visible,
+editorial style product photography, 4K resolution
+```
+
+---
+
+## 5. 专业摄影光线术语
+
+| 中文 | 英文 |
+|------|------|
+| 柔和自然光 | soft natural daylight |
+| 黄金时段 | golden hour lighting |
+| 阴天柔光 | overcast soft light |
+| 窗口柔光 | window light with soft diffusion |
+| 边缘光 | rim light / edge lighting |
+| 电影感布光 | cinematic lighting |
+| 戏剧性侧光 | dramatic side lighting |
+
+## 6. 专业材质术语
+
+| 中文 | 英文 |
+|------|------|
+| 帆布纹理 | canvas texture / woven fabric |
+| 陶瓷光泽 | ceramic gloss / glossy finish |
+| 纸张质感 | paper grain / matte paper |
+| 布料编织 | fabric weave texture |
+
+## 7. Prompt 质量检查清单
+
+### Designer 必须自检
+
+```
+- [ ] Prompt 中是否包含品牌名称（如有）？
+- [ ] 是否使用品牌色？
+- [ ] 光线描述是否具体（不只是 "studio lighting"）？
+- [ ] 材质描述是否具体（canvas/ceramic/paper）？
+- [ ] 环境描述是否存在（不只是白底）？
+- [ ] 构图视角是否指定（eye-level/overhead/low angle）？
+- [ ] 景深描述是否存在（shallow DoF/bokeh）？
+- [ ] 质量参数是否完整（professional quality, 4K）？
+```
 
 ---
 

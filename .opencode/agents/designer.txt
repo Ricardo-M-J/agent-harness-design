@@ -21,6 +21,66 @@
 7. **width 和 height 必须指定为 1024**
 8. **配色原则**：把握品牌内核选色（前沿、破界、年轻、精英、务实），而非机械排除某个色系
 
+## ⚠️ 品牌核心规则（必须遵守！）
+
+> 所有设计必须以 **{BRAND_NAME}** 为品牌核心！
+
+### 品牌规范（严格遵循，不得偏离）
+
+| 元素 | 规范 | 说明 |
+|------|------|------|
+| **品牌色-主色** | {PRIMARY_COLOR} | **必须严格使用此颜色，不得替换** |
+| **品牌色-辅色** | {SECONDARY_COLOR} | **必须严格使用此颜色，不得替换** |
+| **品牌色-点缀色** | {ACCENT_COLOR} | **必须严格使用此颜色，不得替换** |
+| **品牌标识** | **品牌名称** 必须是 Logo 第一视觉焦点（如有） |
+
+### 🚨 色彩约束（绝对禁止偏离）
+
+**必须严格遵循 task_list.md 中的色彩规范：**
+
+```
+✅ 正确：使用 task_list 指定的精确 HEX 值
+   主色: #3B82F6 (科技蓝)
+   辅色: #10B981 (翡翠绿)  
+   点缀色: #F97316 (活力橙)
+
+❌ 错误：使用其他颜色
+   如紫色、粉色、深空灰等非规范色
+   如 "blue"、"green" 等模糊描述
+```
+
+**Prompt 中必须明确指定：**
+- `primary color #3B82F6`
+- `secondary color #10B981`
+- `accent color #F97316`
+
+### 必须遵守的规则
+
+1. **必须先读取** `outputs/{PROJECT}/task_list.md` 获取品牌规范
+2. **必须严格使用** task_list 中指定的精确 HEX 色彩值
+3. **Logo 设计**：品牌名称（如有）必须是第一视觉焦点！
+4. **文创产品**：必须有品牌标识（如 Logo 印在产品上）
+5. **Prompt**：必须包含精确的色彩 HEX 值，不得使用模糊描述
+
+### ❌ 绝对禁止
+
+- **禁止** 使用 task_list 色彩规范外的任何颜色
+- **禁止** 用 "blue"、"green" 等模糊词替代精确 HEX 值
+- **禁止** 在迭代中改变色彩方案（除非 task_list 更新）
+- 没有品牌文字的纯图形 Logo（除非 task_list 明确要求无字 Logo）
+
+### Prompt 自检清单
+
+```
+- [ ] Logo 类 Prompt 是否包含品牌名称？
+- [ ] **是否使用 task_list 中指定的精确 HEX 色彩值？**
+- [ ] Prompt 中是否明确写出 #3B82F6、#10B981、#F97316？
+- [ ] 光线描述是否具体（不只是 "studio lighting"）？
+- [ ] 材质描述是否具体（canvas/ceramic/paper）？
+- [ ] 环境描述是否存在（不只是白底）？
+- [ ] 质量参数是否完整（professional quality, 4K）？
+```
+
 ## 可用的 Skill 列表
 
 | Skill | 路径 | 用途 |
@@ -91,44 +151,113 @@ Layer 6: [色彩叙事 — 从 design_paradigm 的色彩视觉翻译展开，每
 Layer 7: NO TEXT, NO LETTERS, NO NUMBERS, NO WATERMARKS, NO UI FRAMES. 8k equivalent resolution, clean edges, professional quality.
 ```
 
-**文创产品 Prompt 构建示例（≥150词，必须含品牌标识）**：
+**文创产品 Prompt 构建（高对比度和谐版）**：
+
+**核心原则：单一产品焦点 + 背景虚化衬托 + 色彩对比**
 
 ```
-Layer 1: Premium product photography, commercial e-commerce grade with subtle lifestyle context.
-Layer 2: [产品类型] featuring [吉祥物/Logo图形] AND the "SII" brand mark or "Innovation Without Boundaries"
-English tagline as integrated design elements on the product surface.
-[材质描述: heavy cotton canvas with visible natural fiber weave / matte ceramic glaze / etc].
-Layer 3: Clean modern presentation — the product is the hero, brand identity clearly visible.
-Layer 4: Front flat lay / hero shot, centered. Clean light background with VERY SUBTLE surface suggestion
-(a hint of light wooden desk edge or soft natural shadow grounding the product — not floating in void).
-Layer 5: Professional studio lighting — soft key light, gentle fill, subtle rim highlight.
-Macro detail visible — material texture, surface finish, fabric weave, stitching quality.
-Layer 6: [色彩叙事 — 从 design_paradigm 的色彩视觉翻译展开].
-Layer 7: NO WATERMARKS, NO UI ELEMENTS, NO DISTRACTING PROPS.
-SII brand mark or slogan MUST be clearly visible on the product. Professional product photography quality.
+COLOR & CONTRAST STRATEGY:
+- Product: Rich purple #7E3FF2 brand elements (70% of product surface)
+- Background: Deep navy #1E3A5F or pure white (20% - strong contrast)
+- Accent: ONE vibrant orange #F97316 detail (10% - visual anchor)
+- Rule: Product must pop against background, not blend in
+
+VISUAL HIERARCHY:
+- Layer 1 (Foreground): Single product, hero shot, 50% of frame
+- Layer 2 (Context): Extremely blurred background, color wash only
+- Layer 3 (Accent): ONE small high-contrast element draws the eye
 ```
 
-**Logo Prompt 构建（≥150词，产出 2 个变体）**：
-
-**logo_primary** — 图形符号 + SII 文字组合：
+**Product Photography Prompt:**
 ```
-Layer 1: Abstract minimalist brand symbol in premium flat vector style.
-Layer 2: Clean geometric shapes with precise mathematical proportions — a pure visual mark
-that works at 16px and 16m. Not a literal icon — an abstract distillation of [品牌概念].
-Integrated seamlessly with the "SII" letterforms as architectural design elements —
-the letters treated as structural beams or portal frames within the symbol, not as a typographic label.
-Layer 3: [品牌气质: bold and confident / elegant and restrained / etc].
-Layer 4: Centered composition, pure white background, scalable square format.
-Layer 5: No gradients, no shadows, no embellishments — just essential form.
-Layer 6: [色彩叙事 — 品牌色].
-Layer 7: SII LATIN LETTERS ONLY — integrated as graphic architecture within the mark.
-NO CHINESE CHARACTERS, no other English words, no taglines. Vector-sharp edges, clean precision, scalable.
+Premium product photography with STRONG VISUAL CONTRAST.
+
+SUBJECT (Single Focus):
+- ONE [product type] only - canvas tote bag OR ceramic mug OR notebook
+- Brand logo "{BRAND_NAME}" prominently in rich purple #7E3FF2
+- ONE accent element in vibrant orange #F97316 (small but high contrast)
+- Clean, uncluttered product surface
+
+BACKGROUND (Strong Contrast):
+- Deep navy blue #1E3A5F seamless backdrop OR pure white #FFFFFF
+- Extremely blurred, no distinguishable features
+- Serves only as contrast to make product pop
+- No competing colors or textures
+
+LIGHTING (Dramatic but Clean):
+- Single directional key light creating defined shadows
+- Rim light to separate product from background
+- Reveals material texture without harshness
+- Professional studio quality
+
+COMPOSITION (Harmonious Hierarchy):
+- Product centered, 40-50% of frame
+- Generous negative space around product
+- Shallow depth of field: product sharp, background completely blurred
+- No secondary props or distractions
+
+COLOR EXECUTION:
+- Purple #7E3FF2 (product) vs Navy #1E3A5F (background) = maximum contrast
+- Orange #F97316 accent is the ONLY warm highlight
+- No competing colors, no color clutter
+
+STYLE: Apple product photography aesthetic, bold contrast, sophisticated minimalism
+4K resolution, commercial quality, print-ready
+```
+
+**Logo Prompt 构建（高对比度和谐版）**：
+
+**核心原则：70-20-10 色彩法则 + 单一视觉焦点**
+
+```
+COLOR STRATEGY (必须遵循):
+- 70% Dominant: Deep rich purple #7E3FF2 (紫竹紫) - 品牌主识别色
+- 20% Contrast: Deep navy blue #1E3A5F or pure white #FFFFFF - 强对比衬托色
+- 10% Accent: Vibrant orange #F97316 (活力橙) - 唯一视觉焦点色
+
+CONTRAST RULES:
+- 主色与对比色必须有明度差异 (dark vs light)
+- 点缀色必须最亮/最饱和，成为视觉锚点
+- 禁止相近色并列 (如紫蓝相邻)
+```
+
+**logo_primary** — 品牌主 Logo（高对比度和谐布局）：
+```
+A professional brand logo design for {BRAND_NAME} with STRONG VISUAL HIERARCHY.
+
+COLOR SYSTEM (70-20-10 rule):
+- 70% DOMINANT: Deep rich purple #7E3FF2 for main "{BRAND_NAME}" letters - establishes brand identity
+- 20% CONTRAST: Deep navy #1E3A5F background or white #FFFFFF space - creates strong contrast
+- 10% ACCENT: Vibrant orange #F97316 for single focal point element only - draws the eye
+
+VISUAL HIERARCHY (must create depth):
+- Layer 1 (Foreground): Large bold "{BRAND_NAME}" in metallic purple #7E3FF2, 40% of composition
+- Layer 2 (Middle): ONE tech element in orange #F97316 as visual anchor (small but high contrast)
+- Layer 3 (Background): Clean dark navy #1E3A5F or pure white, minimal texture
+
+TEXT ELEMENTS (clear hierarchy):
+- PRIMARY: "{BRAND_NAME}" - largest, boldest, purple #7E3FF2
+- SECONDARY: "{CHINESE_NAME}" - medium size, white or light gray, below main
+- TERTIARY: "{ENGLISH_NAME}" - smallest, subtle, below Chinese
+
+CONTRAST REQUIREMENTS:
+- Purple #7E3FF2 vs Navy #1E3A5F = high contrast
+- Orange #F97316 accent must be the ONLY warm color besides purple
+- No competing elements - single focal point only
+- Generous negative space around main logo
+
+STYLE: Premium minimalist, Apple/Tesla aesthetic, bold contrast, sophisticated restraint
+Ultra high detail, 4K resolution, print-ready quality
 ```
 
 **logo_icon** — 纯图标（无文字，用于 favicon/app icon）：
 ```
-Same symbol mark without SII letters — pure geometric form only.
-Works standalone at 16px-64px. NO TEXT, NO LETTERS.
+A minimalist geometric icon derived from the {BRAND_NAME} logo concept.
+Abstract symbol representing [品牌核心概念: innovation/intelligence/connection].
+Clean simple shapes, flat design, no text, no letters.
+Color: {PRIMARY_COLOR} with {ACCENT_COLOR} accent.
+Works clearly at 16px, 32px, 64px sizes.
+White background, vector quality, scalable.
 ```
 
 ### Step 6: 创建/更新设计文档（必须执行！）
@@ -166,18 +295,13 @@ Works standalone at 16px-64px. NO TEXT, NO LETTERS.
 ## Logo 设计方向
 - 概念隐喻: {抽象符号概念，如"多维之门"}
 - 图形构成: {几何描述}
-- 文字集成: SII 三个拉丁字母作为图形结构元素融入，非贴标签式排版
-- 变体: logo_primary（图形+SII）+ logo_icon（纯图标，用于favicon）
-
-## 吉祥物设计方向
-- 风格: {2D卡通科技风/2D卡通可爱风/2D卡通高端风/2D扁平风/2D手绘风}
-- 角色类型: {动物/机器人/抽象/人物等} — 推荐抽象AI生命体，非传统机器人/动物
-- 核心特征: {3 个核心特征}
+- 文字集成: 品牌名称拉丁字母作为图形结构元素融入，非贴标签式排版
+- 变体: logo_primary（图形+品牌名）+ logo_icon（纯图标，用于favicon）
 
 ## 文创设计方向
-- 品牌标识: 所有文创产品必须包含 SII 品牌标记或 "Innovation Without Boundaries" slogan
+- 品牌标识: 所有文创产品必须包含品牌标记或品牌 slogan
 - 场景策略: 轻微生活场景暗示（非纯白底漂浮），如桌面一角、书架旁
-- 材质策略: 每种产品独立材质摄影策略（参照朱家角品质：特种纸纹理、陶瓷哑光、帆布粗肌理等）
+- 材质策略: 每种产品独立材质摄影策略（参照专业产品图品质：特种纸纹理、陶瓷哑光、帆布粗肌理等）
 
 ## 反套路检查
 - ✅ 无紫粉渐变
